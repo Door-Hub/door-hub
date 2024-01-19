@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:1234/postgres
+    password: postgres
+    username: postgres
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        show_sql: true
+
+  application:
+    name: door-hub
+security:
+  jwt:
+    expiration: 7
+    key: WC+qbHYl2B0o02421L+2UayDp2LtczY/3cSkAyErfTjmcEOXNtyjXq0un/SdY4cw

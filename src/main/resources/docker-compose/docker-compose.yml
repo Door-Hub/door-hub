@@ -1,0 +1,11 @@
+services:
+  leet-code-db:
+    image: postgres:16.1
+    ports:
+      - "1234:5432"
+    environment:
+      - "POSTGRES_PASSWORD=postgres"
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
