@@ -17,16 +17,12 @@ public class UserDtoMapper extends GenericDtoMapper<User, UserCreateDto, UserUpd
     private final ModelMapper mapper;
     @Override
     public User toEntity(UserCreateDto userCreateDto) {
-        User mapped = mapper.map(userCreateDto, User.class);
-        System.out.println("mapped = " + mapped);
-        return mapped;
+        return mapper.map(userCreateDto, User.class);
     }
 
     @Override
     public UserResponseDto toResponseDto(User user) {
-        UserResponseDto mapped = mapper.map(user, UserResponseDto.class);
-        System.out.println("mapped = " + mapped);
-        return mapped;
+        return mapper.map(user, UserResponseDto.class);
     }
 
     @Override
