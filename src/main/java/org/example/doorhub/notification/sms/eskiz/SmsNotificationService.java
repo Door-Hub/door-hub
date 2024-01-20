@@ -19,7 +19,7 @@ public class SmsNotificationService extends AbstractNotificationService {
 
     private final NotificationFeign notificationFeign;
 
-    @Value("${uzum-notificaiton-service.eskiz.access-token}")
+    @Value("${notificaiton-service.eskiz.access-token}")
     private String token;
     @Override
     public boolean supports(NotificationType notificationType) {
