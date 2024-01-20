@@ -2,9 +2,13 @@ package org.example.doorhub.address.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.doorhub.user.entity.User;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,5 +22,7 @@ public class Address {
     private Double longitude;
     private Double latitude;
 
+    @ManyToMany(mappedBy = "addresses")
+    List<User> users;
 
 }
