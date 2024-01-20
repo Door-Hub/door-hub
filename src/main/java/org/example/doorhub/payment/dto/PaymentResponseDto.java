@@ -1,10 +1,10 @@
-package org.example.doorhub.payment.entity;
+package org.example.doorhub.payment.dto;
 
-import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.doorhub.user.entity.User;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -13,19 +13,18 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Entity(name = "`payment`")
-public class Payment {
+public class PaymentResponseDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull
     private Integer id;
+    @NotNull
     private Integer userId;
+    @NotBlank
     private BigDecimal amount;
+    @NotNull
     private LocalDateTime timestamp;
+    @NotBlank
     private String description;
+    @NotBlank
     private String status;
-
-    @ManyToOne
-    @JoinColumn(name = "users_id")
-    private User user;
 }
