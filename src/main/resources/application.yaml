@@ -21,6 +21,6 @@ security:
   jwt:
     key: WC+qbHYl2B0o02421L+2UayDp2LtczY/3cSkAyErfTjmcEOXNtyjXq0un/SdY4cw
 
-notification-service:
+notificaiton-service:
   eskiz:
     access-token: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDgzNTg0MDUsImlhdCI6MTcwNTc2NjQwNSwicm9sZSI6InRlc3QiLCJzaWduIjoiZjNkMzAwYzNhZjU2M2Q3MWFlNTAyM2M5YTYxMjE1MWRiODg3ODFhOTU4MDVkNTNmYTUzZGY1ZGJlZmZhZTNhOCIsInN1YiI6IjU3NzYifQ.0-NAynOnYWPvTNcNKaY70bFqI8VHOH_lAhGfl-VOL-g
