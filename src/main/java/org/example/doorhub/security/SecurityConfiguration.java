@@ -29,7 +29,8 @@ public class SecurityConfiguration {
                                                 "/webjars/**",
                                                 "/user/**",
                                                 "/auth/**" ,
-                                                "/payment/**")
+                                                "/payment/**",
+                                                "/notification")
                                         .permitAll()
                                         .anyRequest()
                                         .authenticated()

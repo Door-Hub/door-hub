@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.example.doorhub.address.entity.Address;
 import org.example.doorhub.category.entity.Category;
 import org.example.doorhub.listeners.UserCreatedUpdated;
-import org.example.doorhub.notification.entity.Notification;
 import org.example.doorhub.payment.entity.Payment;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -50,11 +49,7 @@ public class User implements UserDetails {
     )
     private List<Address> addresses;
 
-
-    @OneToOne
-    @JoinColumn(name = "notification_id" , referencedColumnName = "id")
-    private Notification notification;
-
+    
 
     @OneToMany(mappedBy = "user")
     private List<Payment> payments;

@@ -20,3 +20,7 @@ spring:
 security:
   jwt:
     key: WC+qbHYl2B0o02421L+2UayDp2LtczY/3cSkAyErfTjmcEOXNtyjXq0un/SdY4cw
+
+uzum-notificaiton-service:
+  eskiz:
+    access-token: Bearer
