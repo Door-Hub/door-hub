@@ -4,16 +4,18 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.doorhub.listeners.PaymentTimeStampNow;
 import org.example.doorhub.user.entity.User;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.UUID;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity(name = "`payment`")
+@EntityListeners(PaymentTimeStampNow.class)
 public class Payment {
 
     @Id

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.UUID;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,12 +19,15 @@ public class PaymentResponseDto {
     private Integer id;
     @NotNull
     private Integer userId;
+
     @NotBlank
     private BigDecimal amount;
+
     @NotNull
     private LocalDateTime timestamp;
-    @NotBlank
+
     private String description;
+
     @NotBlank
     private String status;
 }

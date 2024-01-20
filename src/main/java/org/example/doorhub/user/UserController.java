@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,10 +19,18 @@ public class UserController {
 
     private final UserService userService;
 
+
+
     @GetMapping
     public ResponseEntity<Page<UserResponseDto>> getAllUser(Pageable pageable, @RequestParam(required = false) String predicate) {
         Page<UserResponseDto> all = userService.getAll(pageable, predicate);
         return ResponseEntity.ok(all);
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<?> addUserAddress(@RequestParam Integer userid, @RequestParam Integer addressId) {
+        UserResponseDto responseDto = userService.addUserAddress(userid, addressId);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
     @GetMapping("/{id}")
