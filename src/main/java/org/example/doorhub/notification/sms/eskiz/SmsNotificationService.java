@@ -9,7 +9,6 @@ import org.example.doorhub.notification.dto.NotificationRequestDto;
 import org.example.doorhub.notification.sms.eskiz.dto.EskizRefreshResponseDto;
 import org.example.doorhub.notification.sms.eskiz.dto.EskizSmsSentRequestDto;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -19,7 +18,7 @@ public class SmsNotificationService extends AbstractNotificationService {
 
     private final NotificationFeign notificationFeign;
 
-    @Value("${notificaiton-service.eskiz.access-token}")
+    @Value("${notification-service.eskiz.access-token}")
     private String token;
     @Override
     public boolean supports(NotificationType notificationType) {
