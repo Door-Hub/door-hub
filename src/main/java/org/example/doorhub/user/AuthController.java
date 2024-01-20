@@ -22,11 +22,9 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<UserResponseDto> register(@RequestBody @Valid UserCreateDto userRegisterRequestDto){
         UserResponseDto userResponseDto = userService.create(userRegisterRequestDto);
-        System.out.println("userResponseDto" + userResponseDto);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(userResponseDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDto);
     }
+
     @PostMapping("/login")
     public ResponseEntity<UserSignInResponseDto> signIn(@RequestBody @Valid UserSignInDto signInDto){
         UserSignInResponseDto userSignInResponseDto = userService.signIn(signInDto);
