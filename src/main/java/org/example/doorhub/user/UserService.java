@@ -1,6 +1,7 @@
 package org.example.doorhub.user;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.doorhub.address.AddressRepository;
@@ -8,14 +9,23 @@ import org.example.doorhub.address.entity.Address;
 import org.example.doorhub.common.exception.PhoneNumberNotVerifiedException;
 import org.example.doorhub.common.service.GenericCrudService;
 import org.example.doorhub.jwt.JwtService;
+import org.example.doorhub.notification.sms.eskiz.SmsNotificationService;
+import org.example.doorhub.otp.OTP;
+import org.example.doorhub.otp.OTPRepository;
+import org.example.doorhub.otp.dto.OtpVerifyDto;
 import org.example.doorhub.user.dto.*;
 import org.example.doorhub.user.entity.User;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.Random;
 
 
 @Service
@@ -31,6 +41,9 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
     private final Class<User> entityClass = User.class;
 
     private final AddressRepository addressRepository;
+    private final OTPRepository otpRepository;
+    private final ModelMapper modelMapper;
+    private final SmsNotificationService smsNotificationService;
 
 
     @Override
@@ -83,6 +96,66 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
 
         User save = repository.save(user);
         return mapper.toResponseDto(save);
+    }
+
+    @Transactional
+    public UserResponseDto verifyOtp(OtpVerifyDto verifyDto) {
+        OTP otp = otpRepository
+                .findById(verifyDto.getPhone())
+                .orElseThrow(() -> new RuntimeException("You need to register first"));
+
+        if (otp.getCode() == verifyDto.getCode()) {
+            User user = modelMapper.map(otp, User.class);
+            user.setPhoneNumberVerification(true);
+
+            User saved = repository.save(user);
+
+            return modelMapper.map(saved, UserResponseDto.class);
+        } else {
+            throw new RuntimeException("Invalid verification code");
+        }
+    }
+
+    @Transactional
+    public UserResponseDto register(UserCreateDto userCreateDto) {
+
+        String password = userCreateDto.getPassword();
+        String encode = passwordEncoder.encode(password);
+        userCreateDto.setPassword(encode);
+
+        validateUserRegister(userCreateDto);
+
+        save(userCreateDto);
+
+        OTP otp = modelMapper.map(userCreateDto, OTP.class);
+        int code = new Random().nextInt(1000, 9999);
+        otp.setCode(code);
+        otp.setSendTime(LocalDateTime.now());
+        otp.setSentCount(1);
+
+        boolean sendSms = smsNotificationService.sendSms(otp.getPhoneNumber(), "Your verification code: %d".formatted(code));
+        if (sendSms) {
+            OTP save = otpRepository.save(otp);
+            return modelMapper.map(save, UserResponseDto.class);
+        } else {
+            throw new RuntimeException();
+        }
+
+    }
+
+    private void validateUserRegister(UserCreateDto req) {
+        Optional<OTP> otp = otpRepository.findById(req.getPhoneNumber());
+
+        if (otp.isPresent()) {
+            throw new RuntimeException("sms ol ready");
+        } else {
+            Optional<User> byPhoneNumber = repository.findUserByPhoneNumber(req.getPhoneNumber());
+
+            if (byPhoneNumber.isPresent()) {
+                // todo handle exception
+                throw new RuntimeException("this username ol ready taken");
+            }
+        }
     }
 }
 

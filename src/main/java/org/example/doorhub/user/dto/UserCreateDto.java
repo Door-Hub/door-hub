@@ -16,6 +16,7 @@ public class UserCreateDto {
     private String lastname;
 
     @NotBlank
+
     private String phoneNumber;
 
     @NotBlank
