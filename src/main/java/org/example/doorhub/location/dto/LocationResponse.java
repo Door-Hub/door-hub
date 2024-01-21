@@ -3,26 +3,34 @@ package org.example.doorhub.location.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class LocationResponse {
 
+
     @JsonProperty("results")
-    private GeocodingResult[] results;
+    private List<Result> results;
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    private static class GeocodingResult {
-
+    @Data
+    public static class Result {
         @JsonProperty("formatted_address")
         private String formattedAddress;
 
-
+        @Override
+        public String toString() {
+            return formattedAddress;
+        }
     }
-
-
-
-
 }
+
+
+
+
+

@@ -17,12 +17,21 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AddressController {
     private final AddressService addressService;
+    private final LocationService locationService;
 
 
     @PostMapping
-    public ResponseEntity<AddressResponseDto> createAddress(@RequestBody @Valid AddressBaseDto createDTo) {
-        AddressResponseDto addressResponseDto = addressService.create(createDTo);
-        return ResponseEntity.status(HttpStatus.CREATED).body(addressResponseDto);
+    public ResponseEntity<AddressResponseDto> createAddress(@RequestBody @Valid AddressBaseDto createDTo,
+                                                            @RequestParam(name = "lat", required = false) Double latitude,
+                                                            @RequestParam(name = "lon", required = false) Double longitude) {
+        if (latitude != null) {
+            String locationName = locationService.getLocationName(latitude, longitude);
+            AddressResponseDto addressResponseDto = addressService.createe(createDTo, locationName);
+            return ResponseEntity.status(HttpStatus.CREATED).body(addressResponseDto);
+        } else {
+            AddressResponseDto addressResponseDto = addressService.create(createDTo);
+            return ResponseEntity.status(HttpStatus.CREATED).body(addressResponseDto);
+        }
     }
 
 

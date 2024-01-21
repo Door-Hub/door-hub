@@ -11,7 +11,7 @@ import java.lang.reflect.Field;
 
 public abstract class GenericCrudService<ENTITY, ID, CREATE_DTO, UPDATE_DTO, PATCH_DTO, RESPONSE_DTO>
 {
-    public RESPONSE_DTO create( CREATE_DTO createDto )
+    public RESPONSE_DTO create(CREATE_DTO createDto)
     {
         ENTITY saved = save( createDto );
         return getMapper().toResponseDto( saved );

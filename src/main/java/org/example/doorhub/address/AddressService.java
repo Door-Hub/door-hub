@@ -26,21 +26,24 @@ public class AddressService extends GenericCrudService<Address, Integer, Address
     @Override
     protected Address save(AddressBaseDto addressCreateDto) {
 
-        LocationResponse locationName = locationService
-                .getLocationName(addressCreateDto.getLatitude(), addressCreateDto.getLongitude());
-
         Address address = mapper.toEntity(addressCreateDto);
-        System.out.println(locationName);
-
-
-        address.setLocationName(locationName.toString());
-
         return repository.save(address);
     }
+
 
     @Override
     protected Address updateEntity(AddressBaseDto addressUpdateDto, Address address) {
         mapper.update(addressUpdateDto, address);
         return repository.save(address);
+    }
+
+    public AddressResponseDto createe(AddressBaseDto createDTo, String locationName) {
+        Address address = mapper.toEntity(createDTo);
+        address.setLocationName(locationName);
+
+        Address save = repository.save(address);
+
+        return mapper.toResponseDto(save);
+
     }
 }
