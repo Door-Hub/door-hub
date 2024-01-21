@@ -1,9 +1,8 @@
 package org.example.doorhub.address;
 
 import lombok.RequiredArgsConstructor;
-import org.example.doorhub.address.dto.AddressCreateDto;
+import org.example.doorhub.address.dto.AddressBaseDto;
 import org.example.doorhub.address.dto.AddressResponseDto;
-import org.example.doorhub.address.dto.AddressUpdateDto;
 import org.example.doorhub.address.entity.Address;
 import org.example.doorhub.common.service.GenericDtoMapper;
 
@@ -12,12 +11,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class AddressDtoMapper extends GenericDtoMapper<Address, AddressCreateDto, AddressUpdateDto, AddressResponseDto> {
+public class AddressDtoMapper extends GenericDtoMapper<Address, AddressBaseDto, AddressBaseDto, AddressResponseDto> {
     private final ModelMapper mapper;
 
 
     @Override
-    public Address toEntity(AddressCreateDto addressCreateDto) {
+    public Address toEntity(AddressBaseDto addressCreateDto) {
         return mapper.map(addressCreateDto, Address.class);
     }
 
@@ -27,13 +26,12 @@ public class AddressDtoMapper extends GenericDtoMapper<Address, AddressCreateDto
     }
 
     @Override
-    public void update(AddressUpdateDto addressUpdateDto, Address address) {
+    public void update(AddressBaseDto addressUpdateDto, Address address) {
         mapper.map(addressUpdateDto, address);
-
     }
 
     @Override
-    public AddressCreateDto toCreateDto(Address address) {
-        return mapper.map(address, AddressCreateDto.class);
+    public AddressBaseDto toCreateDto(Address address) {
+        return mapper.map(address, AddressBaseDto.class);
     }
 }
