@@ -8,6 +8,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class UserSignInResponseDto {
-    private String phoneNumber;
     private String token;
 }

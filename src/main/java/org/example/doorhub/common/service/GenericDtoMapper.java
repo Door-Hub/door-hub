@@ -7,4 +7,5 @@ public abstract class GenericDtoMapper<ENTITY, CREATE_DTO, UPDATE_DTO, RESPONSE_
     public abstract RESPONSE_DTO toResponseDto( ENTITY entity );
 
     public abstract void update( UPDATE_DTO updateDto, ENTITY entity );
+    public abstract CREATE_DTO toCreateDto(ENTITY entity);
 }

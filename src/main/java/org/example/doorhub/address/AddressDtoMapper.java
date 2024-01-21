@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class AddressDtoMapper extends GenericDtoMapper<Address, AddressCreateDto, AddressUpdateDto, AddressResponseDto > {
+public class AddressDtoMapper extends GenericDtoMapper<Address, AddressCreateDto, AddressUpdateDto, AddressResponseDto> {
     private final ModelMapper mapper;
 
 
@@ -28,7 +28,12 @@ public class AddressDtoMapper extends GenericDtoMapper<Address, AddressCreateDto
 
     @Override
     public void update(AddressUpdateDto addressUpdateDto, Address address) {
-        mapper.map(addressUpdateDto,address);
+        mapper.map(addressUpdateDto, address);
 
+    }
+
+    @Override
+    public AddressCreateDto toCreateDto(Address address) {
+        return mapper.map(address, AddressCreateDto.class);
     }
 }

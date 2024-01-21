@@ -75,10 +75,10 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
                         new BadCredentialsException("Username or password doesn't match"));
 
         if (passwordEncoder.matches(signInDto.getPassword(), user.getPassword())) {
+
             if (user.isPhoneNumberVerification()) {
                 String token = jwtService.generateToken(user.getPhoneNumber());
-                UserResponseDto responseDto = mapper.toResponseDto(user);
-                return new UserSignInResponseDto(responseDto.toString(), token);
+                return new UserSignInResponseDto(token);
             }
             throw new PhoneNumberNotVerifiedException("%s is not verified. Please verify phone your phone number".formatted(user.getPhoneNumber()));
         }
@@ -100,6 +100,7 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
 
     @Transactional
     public UserResponseDto verifyOtp(OtpVerifyDto verifyDto) {
+
         OTP otp = otpRepository
                 .findById(verifyDto.getPhone())
                 .orElseThrow(() -> new RuntimeException("You need to register first"));
@@ -108,9 +109,10 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
             User user = modelMapper.map(otp, User.class);
             user.setPhoneNumberVerification(true);
 
-            User saved = repository.save(user);
+            User save = save(mapper.toCreateDto(user));
 
-            return modelMapper.map(saved, UserResponseDto.class);
+
+            return modelMapper.map(save, UserResponseDto.class);
         } else {
             throw new RuntimeException("Invalid verification code");
         }
@@ -125,7 +127,6 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
 
         validateUserRegister(userCreateDto);
 
-        save(userCreateDto);
 
         OTP otp = modelMapper.map(userCreateDto, OTP.class);
         int code = new Random().nextInt(1000, 9999);
