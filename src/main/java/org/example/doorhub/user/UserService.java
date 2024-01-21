@@ -50,6 +50,7 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
     protected User save(UserCreateDto userCreateDto) {
         User user = mapper.toEntity(userCreateDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPhoneNumberVerification(true);
 
         return repository.save(user);
     }
@@ -107,7 +108,6 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
 
         if (otp.getCode() == verifyDto.getCode()) {
             User user = modelMapper.map(otp, User.class);
-            user.setPhoneNumberVerification(true);
 
             User save = save(mapper.toCreateDto(user));
 
@@ -121,12 +121,7 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
     @Transactional
     public UserResponseDto register(UserCreateDto userCreateDto) {
 
-        String password = userCreateDto.getPassword();
-        String encode = passwordEncoder.encode(password);
-        userCreateDto.setPassword(encode);
-
         validateUserRegister(userCreateDto);
-
 
         OTP otp = modelMapper.map(userCreateDto, OTP.class);
         int code = new Random().nextInt(1000, 9999);
