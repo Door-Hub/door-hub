@@ -6,15 +6,20 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.security.OAuthFlow;
+import io.swagger.v3.oas.models.security.OAuthFlows;
+import io.swagger.v3.oas.models.security.Scopes;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 import java.util.List;
 
 @Configuration
+@EnableWebSecurity
 public class SwaggerConfig {
     @Bean
     public OpenAPI springOpenAPI() {
@@ -38,17 +43,39 @@ public class SwaggerConfig {
                         .url("https://github.com/Door-Hub/door-hub"))
                 .servers(List.of(
                         new Server()
-                                .url("http://localhost:8081/")
+                                .url("http://localhost:8080/")
                                 .description("Production")
                 ))
-                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+                .addSecurityItem(new SecurityRequirement().addList("bearerAuth", "google        Auth").addList("githubAuth"))
                 .components(new Components()
                         .addSecuritySchemes("bearerAuth", new SecurityScheme()
                                 .name("bearerAuth")
                                 .type(SecurityScheme.Type.HTTP)
                                 .scheme("bearer")
-                                .bearerFormat("JWT")));
+                                .bearerFormat("JWT"))
+                        .addSecuritySchemes("googleAuth", new SecurityScheme()
+                                .name("googleAuth")
+                                .type(SecurityScheme.Type.OAUTH2)
+                                .flows(new OAuthFlows()
+                                        .authorizationCode(new OAuthFlow()
+                                                .tokenUrl("https://accounts.google.com/o/oauth2/token")
+                                                .authorizationUrl("https://accounts.google.com/o/oauth2/auth")
+                                                .scopes(new Scopes().addString("openid", "email"))
+                                        )
+                                )
 
+                        )
+                        .addSecuritySchemes("githubAuth", new SecurityScheme()
+                                .name("githubAuth")
+                                .type(SecurityScheme.Type.OAUTH2)
+                                .flows(new OAuthFlows()
+                                        .authorizationCode(new OAuthFlow()
+                                                .tokenUrl("https://github.com/login/oauth/access_token")
+                                                .authorizationUrl("https://github.com/login/oauth/authorize")
+                                                .scopes(new Scopes().addString("read:user", "user:email"))
+                                        )
+                                )
+                        )
+                );
     }
-
 }

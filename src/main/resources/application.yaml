@@ -1,6 +1,17 @@
 server:
-  port: 8081
+  port: 8080
 spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 116281926130-r9qvadd7506ovr9q32lqq7r2qq27m260.apps.googleusercontent.com
+            clientSecret: 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
+          github:
+            clientId: 64b35f7b4e47d459a3de
+            clientSecret: e98d3b02183478ce71ec000e5a26fe2857f8ba7c
+
   datasource:
     url: jdbc:postgresql://localhost:1234/postgres
     password: postgres
@@ -17,6 +28,7 @@ spring:
 
   application:
     name: door-hub
+
 security:
   jwt:
     key: WC+qbHYl2B0o02421L+2UayDp2LtczY/3cSkAyErfTjmcEOXNtyjXq0un/SdY4cw
@@ -24,3 +36,6 @@ security:
 notification-service:
   eskiz:
     access-token: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDgzNTg0MDUsImlhdCI6MTcwNTc2NjQwNSwicm9sZSI6InRlc3QiLCJzaWduIjoiZjNkMzAwYzNhZjU2M2Q3MWFlNTAyM2M5YTYxMjE1MWRiODg3ODFhOTU4MDVkNTNmYTUzZGY1ZGJlZmZhZTNhOCIsInN1YiI6IjU3NzYifQ.0-NAynOnYWPvTNcNKaY70bFqI8VHOH_lAhGfl-VOL-g
+
+
+
