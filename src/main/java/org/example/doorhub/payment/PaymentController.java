@@ -21,7 +21,7 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @PostMapping
-    public ResponseEntity<PaymentResponseDto> create(@RequestBody PaymentCreatedDto createdDto ) {
+    public ResponseEntity<PaymentResponseDto> create(@RequestBody PaymentCreatedDto createdDto) {
         PaymentResponseDto responseDto = paymentService.create(createdDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }

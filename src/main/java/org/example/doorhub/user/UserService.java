@@ -48,7 +48,6 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
 
 
     @Override
-    @Transactional
     protected User save(UserCreateDto userCreateDto) {
         User user = mapper.toEntity(userCreateDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -58,7 +57,6 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
     }
 
     @Override
-    @Transactional
     protected User updateEntity(UserUpdateDto userUpdateDto, User user) {
         mapper.update(userUpdateDto, user);
         return repository.save(user);
@@ -66,7 +64,6 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
 
 
     @Override
-    @Transactional
     public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
         return repository.findUserByPhoneNumber(phone).orElseThrow(() -> new BadCredentialsException("bad credentials"));
     }
@@ -117,6 +114,7 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
 
             User save = save(mapper.toCreateDto(user));
 
+            otpRepository.delete(otp);
 
             return modelMapper.map(save, UserResponseDto.class);
         } else {
@@ -145,7 +143,7 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
 
     }
 
-    @Transactional
+
     protected void validateUserRegister(UserCreateDto req) throws CustomExceptionThisUsernameOlReadyTaken {
         Optional<OTP> otp = otpRepository.findById(req.getPhoneNumber());
 
