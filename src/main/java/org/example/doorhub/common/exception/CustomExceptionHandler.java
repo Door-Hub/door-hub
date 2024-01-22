@@ -142,4 +142,16 @@ public class CustomExceptionHandler
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
     }
+
+    @ExceptionHandler(ExceptionUNAUTHORIZED.class)
+    public ResponseEntity<CustomErrorResponse> handleSmsVerificationException(ExceptionUNAUTHORIZED e){
+        log.error(e.getMessage(),e);
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(CustomErrorResponse.builder()
+                        .message(e.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .status(HttpStatus.UNAUTHORIZED)
+                        .build());
+    }
 }

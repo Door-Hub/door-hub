@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.example.doorhub.address.AddressRepository;
 import org.example.doorhub.address.entity.Address;
 import org.example.doorhub.common.exception.CustomExceptionThisUsernameOlReadyTaken;
+import org.example.doorhub.common.exception.ExceptionUNAUTHORIZED;
 import org.example.doorhub.common.exception.PhoneNumberNotVerifiedException;
+import org.example.doorhub.common.exception.SmsVerificationException;
 import org.example.doorhub.common.service.GenericCrudService;
 import org.example.doorhub.jwt.JwtService;
 import org.example.doorhub.notification.sms.eskiz.SmsNotificationService;
@@ -104,7 +106,7 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
 
         OTP otp = otpRepository
                 .findById(verifyDto.getPhone())
-                .orElseThrow(() -> new RuntimeException("You need to register first"));
+                .orElseThrow(() -> new ExceptionUNAUTHORIZED("You need to register first"));
 
         if (otp.getCode() == verifyDto.getCode()) {
             User user = modelMapper.map(otp, User.class);
@@ -115,7 +117,7 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
 
             return modelMapper.map(save, UserResponseDto.class);
         } else {
-            throw new RuntimeException("Invalid verification code");
+            throw new SmsVerificationException("Invalid verification code");
         }
     }
 
