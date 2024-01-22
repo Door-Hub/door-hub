@@ -1,6 +1,7 @@
 package org.example.doorhub.notification.sms.eskiz.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,8 +10,10 @@ import lombok.NoArgsConstructor;
 public class EskizSmsSentRequestDto {
 
     @JsonProperty("mobile_phone")
+    @NotBlank
     private String phoneNumber;
 
+    @NotBlank
     private String message;
 
     private final String from="4546";

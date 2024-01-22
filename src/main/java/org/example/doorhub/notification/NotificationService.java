@@ -1,6 +1,7 @@
 package org.example.doorhub.notification;
 
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ public class NotificationService {
 
     private final List<AbstractNotificationService>services;
 
+    @Transactional
     public AbstractNotificationService getService(NotificationType notificationType){
         for (AbstractNotificationService service : services) {
             if (service.supports(notificationType)){

@@ -21,6 +21,7 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(name = "user_id")
     private Integer userId;
     private BigDecimal amount;
     private LocalDateTime timestamp;

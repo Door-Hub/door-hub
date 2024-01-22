@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 public class PaymentCreatedDto {
 
     @NotNull
-    @Min(value = 5000)
+    @Min(value = 500)
     private BigDecimal amount;
     @NotBlank
     @Size(min = 3)

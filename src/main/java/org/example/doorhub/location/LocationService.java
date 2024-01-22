@@ -1,5 +1,6 @@
 package org.example.doorhub.location;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.doorhub.location.dto.LocationResponse;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,7 @@ public class LocationService {
     @Value("${location.api.key}")
     private String LOCATION_KEY;
 
+    @Transactional
     public String getLocationName(Double latitude, Double longitude) {
         LocationResponse location = locationAPIFeign.getLocation(LOCATION_KEY,
                 latitude.toString() + "," + longitude.toString());

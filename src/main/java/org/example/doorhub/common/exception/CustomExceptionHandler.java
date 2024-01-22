@@ -2,6 +2,7 @@ package org.example.doorhub.common.exception;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.el.parser.TokenMgrError;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -66,23 +67,23 @@ public class CustomExceptionHandler
             .body( buildErrorResponse( message, HttpStatus.CONFLICT ) );
     }
 
-    @ExceptionHandler( MethodArgumentNotValidException.class )
-    public ResponseEntity<CustomErrorResponse> handleMethodArgumentNotValidException( MethodArgumentNotValidException e )
-    {
-        Map<String, Object> errors = new HashMap<>();
-
-        // Collecting errors
-        e.getBindingResult().getAllErrors().forEach( error -> {
-            String fieldName = ( (FieldError) error ).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put( fieldName, errorMessage );
-        } );
-
-        log.error( e.getMessage(), e );
-        return ResponseEntity
-            .status( HttpStatus.BAD_REQUEST )
-            .body( buildErrorResponse( errors, HttpStatus.BAD_REQUEST ) );
-    }
+//    @ExceptionHandler( MethodArgumentNotValidException.class )
+//    public ResponseEntity<CustomErrorResponse> handleMethodArgumentNotValidException(String e )
+//    {
+//        Map<String, Object> errors = new HashMap<>();
+//
+//        // Collecting errors
+//        e.getBindingResult().getAllErrors().forEach( error -> {
+//            String fieldName = ( (FieldError) error ).getField();
+//            String errorMessage = error.getDefaultMessage();
+//            errors.put( fieldName, errorMessage );
+//        } );
+//
+//        log.error( e.getMessage(), e );
+//        return ResponseEntity
+//            .status( HttpStatus.BAD_REQUEST )
+//            .body( buildErrorResponse( errors, HttpStatus.BAD_REQUEST ) );
+//    }
 
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<CustomErrorResponse> handleNoResourceFoundException(NoResourceFoundException e){
@@ -130,4 +131,15 @@ public class CustomExceptionHandler
                         .build());
     }
 
+    @ExceptionHandler(CustomExceptionThisUsernameOlReadyTaken.class)
+    public ResponseEntity<CustomErrorResponse> handleSmsVerificationException(CustomExceptionThisUsernameOlReadyTaken e){
+        log.error(e.getMessage(),e);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(CustomErrorResponse.builder()
+                        .message(e.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+    }
 }
