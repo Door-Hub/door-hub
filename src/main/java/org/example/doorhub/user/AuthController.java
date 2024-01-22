@@ -2,6 +2,7 @@ package org.example.doorhub.user;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.doorhub.common.exception.CustomExceptionThisUsernameOlReadyTaken;
 import org.example.doorhub.jwt.JwtService;
 import org.example.doorhub.otp.dto.OtpVerifyDto;
 import org.example.doorhub.user.dto.UserCreateDto;
@@ -23,7 +24,7 @@ public class AuthController {
     private final JwtService jwtService;
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDto> register(@RequestBody @Valid UserCreateDto userRegisterRequestDto){
+    public ResponseEntity<UserResponseDto> register(@RequestBody @Valid UserCreateDto userRegisterRequestDto) throws CustomExceptionThisUsernameOlReadyTaken {
         UserResponseDto userResponseDto = userService.register(userRegisterRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDto);
     }

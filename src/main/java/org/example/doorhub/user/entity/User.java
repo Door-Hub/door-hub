@@ -31,11 +31,13 @@ public class User implements UserDetails {
     private String firstname;
     private String lastname;
     private String username;
+    @Column(name = "phone_number")
     private String phoneNumber;
     private String email;
     private String password;
     private String gender;
     private LocalDate brithDate;
+    @Column(name = "phone_number_verification")
     private boolean phoneNumberVerification;
     private LocalDateTime created;
     private LocalDateTime updated;

@@ -1,5 +1,6 @@
 package org.example.doorhub.notification.sms.eskiz.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,5 +12,6 @@ import java.util.HashMap;
 @Data
 public class EskizRefreshResponseDto {
 
+    @NotBlank
     private HashMap<String , String >data;
 }

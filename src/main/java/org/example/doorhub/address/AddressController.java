@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/address")
 @RequiredArgsConstructor
 public class AddressController {
+
     private final AddressService addressService;
     private final LocationService locationService;
 
@@ -26,7 +27,7 @@ public class AddressController {
                                                             @RequestParam(name = "lon", required = false) Double longitude) {
         if (latitude != null) {
             String locationName = locationService.getLocationName(latitude, longitude);
-            AddressResponseDto addressResponseDto = addressService.createe(createDTo, locationName);
+            AddressResponseDto addressResponseDto = addressService.create(createDTo, locationName);
             return ResponseEntity.status(HttpStatus.CREATED).body(addressResponseDto);
         } else {
             AddressResponseDto addressResponseDto = addressService.create(createDTo);

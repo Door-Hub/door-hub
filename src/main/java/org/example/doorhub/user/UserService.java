@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.doorhub.address.AddressRepository;
 import org.example.doorhub.address.entity.Address;
+import org.example.doorhub.common.exception.CustomExceptionThisUsernameOlReadyTaken;
 import org.example.doorhub.common.exception.PhoneNumberNotVerifiedException;
 import org.example.doorhub.common.service.GenericCrudService;
 import org.example.doorhub.jwt.JwtService;
@@ -47,6 +48,7 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
 
 
     @Override
+    @Transactional
     protected User save(UserCreateDto userCreateDto) {
         User user = mapper.toEntity(userCreateDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -56,6 +58,7 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
     }
 
     @Override
+    @Transactional
     protected User updateEntity(UserUpdateDto userUpdateDto, User user) {
         mapper.update(userUpdateDto, user);
         return repository.save(user);
@@ -63,10 +66,12 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
 
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
         return repository.findUserByPhoneNumber(phone).orElseThrow(() -> new BadCredentialsException("bad credentials"));
     }
 
+    @Transactional
     public UserSignInResponseDto signIn(UserSignInDto signInDto) {
         String phoneNumber = signInDto.getPhoneNumber();
 
@@ -86,6 +91,7 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
         throw new BadCredentialsException("Username or password doesn't match");
     }
 
+    @Transactional
     public UserResponseDto addUserAddress(Integer userid, Integer addressId) {
 
         User user = repository.findById(userid)
@@ -119,7 +125,7 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
     }
 
     @Transactional
-    public UserResponseDto register(UserCreateDto userCreateDto) {
+    public UserResponseDto register(UserCreateDto userCreateDto) throws CustomExceptionThisUsernameOlReadyTaken {
 
         validateUserRegister(userCreateDto);
 
@@ -139,7 +145,8 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
 
     }
 
-    private void validateUserRegister(UserCreateDto req) {
+    @Transactional
+    protected void validateUserRegister(UserCreateDto req) throws CustomExceptionThisUsernameOlReadyTaken {
         Optional<OTP> otp = otpRepository.findById(req.getPhoneNumber());
 
         if (otp.isPresent()) {
@@ -148,8 +155,8 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
             Optional<User> byPhoneNumber = repository.findUserByPhoneNumber(req.getPhoneNumber());
 
             if (byPhoneNumber.isPresent()) {
-                // todo handle exception
-                throw new RuntimeException("this username ol ready taken");
+
+                throw new CustomExceptionThisUsernameOlReadyTaken("This phone number is already logged in");
             }
         }
     }
