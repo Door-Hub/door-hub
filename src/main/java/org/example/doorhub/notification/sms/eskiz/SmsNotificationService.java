@@ -37,11 +37,11 @@ public class SmsNotificationService extends AbstractNotificationService {
                 notificationFeign.send(new EskizSmsSentRequestDto(notificationRequestDto.getPhoneNumber(), notificationRequestDto.getMessage()),token);
                 return true;
             }catch (Exception e){
-                log.error("Exception happend while refreshing eskiz jwt token", e);
+                log.error("Exception happened while refreshing eskiz jwt token", e);
                 return false;
             }
         }catch (Exception e){
-            log.error("Unable to send sms to number .Exception happend", e);
+            log.error("Unable to send sms to number .Exception happened", e);
             return false;
         }
     }
@@ -56,11 +56,11 @@ public class SmsNotificationService extends AbstractNotificationService {
                 notificationFeign.send(new EskizSmsSentRequestDto(phone, message),token);
                 return true;
             }catch (Exception e){
-                log.error("Exception happend while refreshing eskiz jwt token", e);
+                log.error("Exception happened while refreshing eskiz jwt token", e);
                 return false;
             }
         }catch (Exception e){
-            log.error("Unable to send sms to number .Exception happend", e);
+            log.error("Unable to send sms to number .Exception happened", e);
             return false;
         }
     }
