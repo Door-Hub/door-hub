@@ -22,8 +22,10 @@ public class Address {
     private String locationName;
     private Double longitude;
     private Double latitude;
+    private String home;
 
-    @ManyToMany(mappedBy = "addresses")
-    List<User> users;
+    @ManyToOne()
+    @JoinColumn(name = "user_Id")
+    private User user;
 
 }

@@ -40,7 +40,6 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final Class<User> entityClass = User.class;
-
     private final AddressRepository addressRepository;
     private final OTPRepository otpRepository;
     private final ModelMapper modelMapper;
@@ -50,8 +49,7 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
     @Override
     protected User save(UserCreateDto userCreateDto) {
         User user = mapper.toEntity(userCreateDto);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setPhoneNumberVerification(true);
+
 
         return repository.save(user);
     }
@@ -79,11 +77,10 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
 
         if (passwordEncoder.matches(signInDto.getPassword(), user.getPassword())) {
 
-            if (user.isPhoneNumberVerification()) {
+
                 String token = jwtService.generateToken(user.getPhoneNumber());
                 return new UserSignInResponseDto(token);
-            }
-            throw new PhoneNumberNotVerifiedException("%s is not verified. Please verify phone your phone number".formatted(user.getPhoneNumber()));
+
         }
         throw new BadCredentialsException("Username or password doesn't match");
     }
