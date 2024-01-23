@@ -1,4 +1,4 @@
-package org.example.doorhub.notification.sms.eskiz.dto;
+package org.example.doorhub.notification.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;

@@ -1,10 +1,10 @@
-package org.example.doorhub.notification.sms.eskiz;
+package org.example.doorhub.notification;
 
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.doorhub.notification.sms.eskiz.dto.EskizRefreshResponseDto;
-import org.example.doorhub.notification.sms.eskiz.dto.EskizSmsSentRequestDto;
+import org.example.doorhub.notification.dto.EskizRefreshResponseDto;
+import org.example.doorhub.notification.dto.EskizSmsSentRequestDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

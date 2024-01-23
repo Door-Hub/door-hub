@@ -22,5 +22,6 @@ public class UserUpdateDto {
     private String email;
     private String gender;
     private LocalDate brithDate;
+    private String avatar;
 
 }

@@ -1,4 +1,4 @@
-package org.example.doorhub.notification.sms.eskiz.dto;
+package org.example.doorhub.notification.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

@@ -2,6 +2,7 @@ package org.example.doorhub.category.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.doorhub.discount.entity.Discount;
 import org.example.doorhub.user.entity.User;
 
 import java.util.List;
@@ -19,7 +20,14 @@ public class Category {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private User user;
+
+    @OneToMany(mappedBy = "category")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private List<Discount> discounts;
 
     @OneToMany(mappedBy = "parentCategory")
     @EqualsAndHashCode.Exclude

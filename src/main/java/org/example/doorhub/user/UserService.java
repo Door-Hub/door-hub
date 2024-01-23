@@ -11,7 +11,7 @@ import org.example.doorhub.common.exception.ExceptionUNAUTHORIZED;
 import org.example.doorhub.common.exception.SmsVerificationException;
 import org.example.doorhub.common.service.GenericCrudService;
 import org.example.doorhub.jwt.JwtService;
-import org.example.doorhub.notification.sms.eskiz.SmsNotificationService;
+import org.example.doorhub.notification.SmsNotificationService;
 import org.example.doorhub.otp.OTP;
 import org.example.doorhub.otp.OTPRepository;
 import org.example.doorhub.otp.dto.OtpVerifyDto;

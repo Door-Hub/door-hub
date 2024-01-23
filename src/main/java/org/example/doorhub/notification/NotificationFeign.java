@@ -1,7 +1,7 @@
-package org.example.doorhub.notification.sms.eskiz;
+package org.example.doorhub.notification;
 
-import org.example.doorhub.notification.sms.eskiz.dto.EskizRefreshResponseDto;
-import org.example.doorhub.notification.sms.eskiz.dto.EskizSmsSentRequestDto;
+import org.example.doorhub.notification.dto.EskizRefreshResponseDto;
+import org.example.doorhub.notification.dto.EskizSmsSentRequestDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.PatchMapping;
