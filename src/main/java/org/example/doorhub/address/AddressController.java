@@ -56,7 +56,7 @@ public class AddressController {
         return ResponseEntity.ok(responseDto);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("location/{id}")
     public ResponseEntity<AddressResponseDto> updateAddressLocation(@PathVariable Integer id,
                                                                     @RequestParam(name = "lat", required = false) Double latitude,
                                                                     @RequestParam(name = "lon", required = false) Double longitude) {

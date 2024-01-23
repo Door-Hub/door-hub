@@ -38,9 +38,19 @@ public class AuthController {
                 .body(userResponseDto);
     }
 
-    @PostMapping("/verify-phone")
-    public ResponseEntity<UserResponseDto> verifyPhone(@RequestBody @Valid OtpVerifyDto verifyDto) {
-        UserResponseDto userResponseDto = userService.verifyOtp(verifyDto);
+    @PostMapping("register/verify-phone")
+    public ResponseEntity<UserResponseDto> registerVerifyPhone(@RequestBody @Valid OtpVerifyDto verifyDto) {
+        UserResponseDto userResponseDto = userService.registerVerifyOtp(verifyDto);
+        String token = jwtService.generateToken(userResponseDto.getPhoneNumber());
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .body(userResponseDto);
+    }
+
+    @PostMapping("login/verify-phone")
+    public ResponseEntity<UserResponseDto> signInVerifyPhone(@RequestBody @Valid OtpVerifyDto verifyDto) {
+        UserResponseDto userResponseDto = userService.signInVerifyOtp(verifyDto);
         String token = jwtService.generateToken(userResponseDto.getPhoneNumber());
 
         return ResponseEntity.status(HttpStatus.CREATED)

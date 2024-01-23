@@ -50,23 +50,17 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
     @Override
     protected User save(UserCreateDto userCreateDto) {
         User user = mapper.toEntity(userCreateDto);
-
-
         return repository.save(user);
     }
-
     @Override
     protected User updateEntity(UserUpdateDto userUpdateDto, User user) {
         mapper.update(userUpdateDto, user);
         return repository.save(user);
     }
-
-
     @Override
     public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
         return repository.findUserByPhoneNumber(phone).orElseThrow(() -> new BadCredentialsException("bad credentials"));
     }
-
     @Transactional
     public UserResponseDto signIn(UserSignInDto signInDto) {
         String phoneNumber = signInDto.getPhoneNumber();
@@ -76,14 +70,13 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
                 .orElseThrow(() ->
                         new BadCredentialsException("Username or password doesn't match"));
 
-        try {
-            validateUser(mapper.toCreateDto(user));
-        } catch (CustomExceptionThisUsernameOlReadyTaken e) {
-            throw new RuntimeException(e);
+        Optional<OTP> otp = otpRepository.findById(user.getPhoneNumber());
+        if (otp.isPresent()) {
+            throw new RuntimeException("sms ol ready");
         }
+
         return sendSms(mapper.toCreateDto(user));
     }
-
     @Transactional
     public UserResponseDto addUserAddress(Integer userid, Integer addressId) {
 
@@ -97,9 +90,8 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
         User save = repository.save(user);
         return mapper.toResponseDto(save);
     }
-
     @Transactional
-    public UserResponseDto verifyOtp(OtpVerifyDto verifyDto) {
+    public UserResponseDto registerVerifyOtp(OtpVerifyDto verifyDto) {
 
         OTP otp = otpRepository
                 .findById(verifyDto.getPhone())
@@ -117,7 +109,19 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
             throw new SmsVerificationException("Invalid verification code");
         }
     }
-
+    @Transactional
+    public UserResponseDto signInVerifyOtp(OtpVerifyDto verifyDto) {
+        OTP otp = otpRepository
+                .findById(verifyDto.getPhone())
+                .orElseThrow(() -> new ExceptionUNAUTHORIZED("You need to register first"));
+        if (otp.getCode() == verifyDto.getCode()) {
+            User user = modelMapper.map(otp, User.class);
+            otpRepository.delete(otp);
+            return mapper.toResponseDto(user);
+        } else {
+            throw new SmsVerificationException("Invalid verification code");
+        }
+    }
     @Transactional
     public UserResponseDto register(UserCreateDto userCreateDto) {
 
@@ -129,7 +133,6 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
         return sendSms(userCreateDto);
 
     }
-
     private UserResponseDto sendSms(UserCreateDto userCreateDto) {
 
         OTP otp = modelMapper.map(userCreateDto, OTP.class);
@@ -146,8 +149,6 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
             throw new RuntimeException();
         }
     }
-
-
     protected void validateUser(UserCreateDto req) throws CustomExceptionThisUsernameOlReadyTaken {
         Optional<OTP> otp = otpRepository.findById(req.getPhoneNumber());
 
