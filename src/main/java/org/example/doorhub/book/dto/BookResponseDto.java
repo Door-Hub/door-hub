@@ -1,7 +1,5 @@
-package org.example.doorhub.book.entity;
+package org.example.doorhub.book.dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,10 +9,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Entity
-public class Book {
-
-    @Id
+public class BookResponseDto {
     private Integer id;
     private Integer booker;
     private Integer worker;
@@ -22,5 +17,4 @@ public class Book {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private boolean Accepted;
-
 }
