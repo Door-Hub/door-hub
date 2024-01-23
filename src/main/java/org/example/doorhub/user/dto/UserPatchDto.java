@@ -26,8 +26,6 @@ public class UserPatchDto {
     @NotBlank
     private String email;
 
-    @NotBlank
-    private String password;
 
     private String gender;
 

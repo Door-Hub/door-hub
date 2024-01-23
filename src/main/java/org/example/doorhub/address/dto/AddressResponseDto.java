@@ -16,7 +16,8 @@ public class AddressResponseDto extends AddressBaseDto {
 
     @NotNull
     private Integer id;
-    @NotBlank
     private String locationName;
+    private String name;
+    private String home;
 
 }

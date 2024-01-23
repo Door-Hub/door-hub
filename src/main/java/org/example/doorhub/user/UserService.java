@@ -8,7 +8,6 @@ import org.example.doorhub.address.AddressRepository;
 import org.example.doorhub.address.entity.Address;
 import org.example.doorhub.common.exception.CustomExceptionThisUsernameOlReadyTaken;
 import org.example.doorhub.common.exception.ExceptionUNAUTHORIZED;
-import org.example.doorhub.common.exception.PhoneNumberNotVerifiedException;
 import org.example.doorhub.common.exception.SmsVerificationException;
 import org.example.doorhub.common.service.GenericCrudService;
 import org.example.doorhub.jwt.JwtService;
@@ -69,7 +68,7 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
     }
 
     @Transactional
-    public UserSignInResponseDto signIn(UserSignInDto signInDto) {
+    public UserResponseDto signIn(UserSignInDto signInDto) {
         String phoneNumber = signInDto.getPhoneNumber();
 
         User user = repository
@@ -77,14 +76,12 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
                 .orElseThrow(() ->
                         new BadCredentialsException("Username or password doesn't match"));
 
-        if (passwordEncoder.matches(signInDto.getPassword(), user.getPassword())) {
-
-
-                String token = jwtService.generateToken(user.getPhoneNumber());
-                return new UserSignInResponseDto(token);
-
+        try {
+            validateUser(mapper.toCreateDto(user));
+        } catch (CustomExceptionThisUsernameOlReadyTaken e) {
+            throw new RuntimeException(e);
         }
-        throw new BadCredentialsException("Username or password doesn't match");
+        return sendSms(mapper.toCreateDto(user));
     }
 
     @Transactional
@@ -122,9 +119,18 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
     }
 
     @Transactional
-    public UserResponseDto register(UserCreateDto userCreateDto) throws CustomExceptionThisUsernameOlReadyTaken {
+    public UserResponseDto register(UserCreateDto userCreateDto) {
 
-        validateUserRegister(userCreateDto);
+        try {
+            validateUser(userCreateDto);
+        } catch (CustomExceptionThisUsernameOlReadyTaken e) {
+            throw new RuntimeException(e);
+        }
+        return sendSms(userCreateDto);
+
+    }
+
+    private UserResponseDto sendSms(UserCreateDto userCreateDto) {
 
         OTP otp = modelMapper.map(userCreateDto, OTP.class);
         int code = new Random().nextInt(1000, 9999);
@@ -139,11 +145,10 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
         } else {
             throw new RuntimeException();
         }
-
     }
 
 
-    protected void validateUserRegister(UserCreateDto req) throws CustomExceptionThisUsernameOlReadyTaken {
+    protected void validateUser(UserCreateDto req) throws CustomExceptionThisUsernameOlReadyTaken {
         Optional<OTP> otp = otpRepository.findById(req.getPhoneNumber());
 
         if (otp.isPresent()) {

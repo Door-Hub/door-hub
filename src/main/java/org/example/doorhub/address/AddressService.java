@@ -4,17 +4,17 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.doorhub.address.dto.AddressBaseDto;
 import org.example.doorhub.address.dto.AddressResponseDto;
+import org.example.doorhub.address.dto.AddressUpdateDto;
 import org.example.doorhub.address.entity.Address;
 import org.example.doorhub.common.service.GenericCrudService;
 import org.example.doorhub.location.LocationService;
-import org.example.doorhub.location.dto.LocationResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 @Getter
-public class AddressService extends GenericCrudService<Address, Integer, AddressBaseDto, AddressBaseDto, AddressBaseDto, AddressResponseDto> {
+public class AddressService extends GenericCrudService<Address, Integer, AddressBaseDto, AddressUpdateDto, AddressUpdateDto, AddressResponseDto> {
 
     private final AddressRepository repository;
     private final AddressDtoMapper mapper;
@@ -32,7 +32,7 @@ public class AddressService extends GenericCrudService<Address, Integer, Address
 
 
     @Override
-    protected Address updateEntity(AddressBaseDto addressUpdateDto, Address address) {
+    protected Address updateEntity(AddressUpdateDto addressUpdateDto, Address address) {
         mapper.update(addressUpdateDto, address);
         return repository.save(address);
     }
@@ -44,5 +44,17 @@ public class AddressService extends GenericCrudService<Address, Integer, Address
         Address save = repository.save(address);
 
         return mapper.toResponseDto(save);
+    }
+
+    public AddressResponseDto updateLocation(Integer id, String location) {
+        Address address = repository.findById(id).orElseThrow();
+
+        address.setLocationName(location);
+
+        Address save = repository.save(address);
+
+        return mapper.toResponseDto(save);
+
+
     }
 }
