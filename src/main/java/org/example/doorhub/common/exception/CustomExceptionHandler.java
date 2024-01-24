@@ -154,4 +154,15 @@ public class CustomExceptionHandler
                         .status(HttpStatus.UNAUTHORIZED)
                         .build());
     }
+    public ResponseEntity<CustomErrorResponse> handleSmsAlreadySentException(SmsAlreadySentException e) {
+        log.error(e.getMessage(), e);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(CustomErrorResponse.builder()
+                        .message(e.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+    }
+
 }

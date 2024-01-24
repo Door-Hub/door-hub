@@ -39,4 +39,5 @@ public class Category {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Category parentCategory;
+
 }
