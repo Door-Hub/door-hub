@@ -8,6 +8,7 @@ import org.example.doorhub.address.AddressRepository;
 import org.example.doorhub.address.entity.Address;
 import org.example.doorhub.common.exception.CustomExceptionThisUsernameOlReadyTaken;
 import org.example.doorhub.common.exception.ExceptionUNAUTHORIZED;
+import org.example.doorhub.common.exception.SmsAlreadySentException;
 import org.example.doorhub.common.exception.SmsVerificationException;
 import org.example.doorhub.common.service.GenericCrudService;
 import org.example.doorhub.jwt.JwtService;
@@ -72,7 +73,7 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
 
         Optional<OTP> otp = otpRepository.findById(user.getPhoneNumber());
         if (otp.isPresent()) {
-            throw new RuntimeException("sms ol ready");
+            throw new SmsAlreadySentException("sms ol ready");
         }
 
         return sendSms(mapper.toCreateDto(user));
@@ -123,12 +124,12 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
         }
     }
     @Transactional
-    public UserResponseDto register(UserCreateDto userCreateDto) {
+    public UserResponseDto register(UserCreateDto userCreateDto) throws CustomExceptionThisUsernameOlReadyTaken {
 
         try {
             validateUser(userCreateDto);
         } catch (CustomExceptionThisUsernameOlReadyTaken e) {
-            throw new RuntimeException(e);
+            throw new CustomExceptionThisUsernameOlReadyTaken("Username ol ready taken");
         }
         return sendSms(userCreateDto);
 
@@ -146,19 +147,18 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
             OTP save = otpRepository.save(otp);
             return modelMapper.map(save, UserResponseDto.class);
         } else {
-            throw new RuntimeException();
+            throw new ExceptionUNAUTHORIZED("Failed to send SMS");
         }
     }
     protected void validateUser(UserCreateDto req) throws CustomExceptionThisUsernameOlReadyTaken {
         Optional<OTP> otp = otpRepository.findById(req.getPhoneNumber());
 
         if (otp.isPresent()) {
-            throw new RuntimeException("sms ol ready");
+            throw new SmsAlreadySentException("sms ol ready");
         } else {
             Optional<User> byPhoneNumber = repository.findUserByPhoneNumber(req.getPhoneNumber());
 
             if (byPhoneNumber.isPresent()) {
-
                 throw new CustomExceptionThisUsernameOlReadyTaken("This phone number is already logged in");
             }
         }
