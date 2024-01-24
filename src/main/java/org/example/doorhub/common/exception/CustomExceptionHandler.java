@@ -154,6 +154,8 @@ public class CustomExceptionHandler
                         .status(HttpStatus.UNAUTHORIZED)
                         .build());
     }
+
+    @ExceptionHandler(value = SmsAlreadySentException.class)
     public ResponseEntity<CustomErrorResponse> handleSmsAlreadySentException(SmsAlreadySentException e) {
         log.error(e.getMessage(), e);
         return ResponseEntity
@@ -162,6 +164,18 @@ public class CustomExceptionHandler
                         .message(e.getMessage())
                         .timestamp(LocalDateTime.now())
                         .status(HttpStatus.BAD_REQUEST)
+                        .build());
+    }
+
+    @ExceptionHandler(value = CustomCategoryNotFoundException.class)
+    public ResponseEntity<CustomErrorResponse> handleSmsAlreadySentException(CustomCategoryNotFoundException e) {
+        log.error(e.getMessage(), e);
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(CustomErrorResponse.builder()
+                        .message(e.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .status(HttpStatus.NOT_FOUND)
                         .build());
     }
 
