@@ -1,12 +1,8 @@
 package org.example.doorhub.attachment.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
+import org.example.doorhub.user.entity.User;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,6 +19,9 @@ public class Attachment {
     @Enumerated(EnumType.STRING)
     private FileType fileType;
 
-
-
+    @ManyToOne
+    @JoinColumn(name = "user_id" , nullable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private User user;
 }

@@ -2,9 +2,9 @@ package org.example.doorhub.book.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.OneToOne;
+import lombok.*;
+import org.example.doorhub.user.entity.User;
 
 import java.time.LocalDateTime;
 
@@ -23,4 +23,8 @@ public class Book {
     private LocalDateTime endDate;
     private boolean Accepted;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToOne(mappedBy = "book")
+    private User user;
 }

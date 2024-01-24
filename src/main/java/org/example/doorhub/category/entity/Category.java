@@ -3,8 +3,10 @@ package org.example.doorhub.category.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.doorhub.discount.entity.Discount;
+import org.example.doorhub.review.entity.Review;
 import org.example.doorhub.user.entity.User;
 
+import javax.swing.text.View;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,6 +19,14 @@ public class Category {
 
     @Id
     private Integer id;
+    private String name;
+    private String avatar;
+    private List<Integer> stars;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "category")
+    private List<Review> views;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -35,7 +45,7 @@ public class Category {
     private List<Category> categoryList;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "categorys_id")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Category parentCategory;

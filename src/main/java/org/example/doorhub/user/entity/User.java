@@ -3,8 +3,11 @@ package org.example.doorhub.user.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.doorhub.address.entity.Address;
+import org.example.doorhub.attachment.entity.Attachment;
+import org.example.doorhub.book.entity.Book;
 import org.example.doorhub.category.entity.Category;
 import org.example.doorhub.listeners.UserCreatedUpdated;
+import org.example.doorhub.review.entity.Review;
 import org.example.doorhub.user.permission.UserPermissions;
 import org.example.doorhub.user.role.Role;
 import org.springframework.security.core.GrantedAuthority;
@@ -50,15 +53,38 @@ public class User implements UserDetails {
     @ToString.Exclude
     private List<Category> categories;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role"))
     private List<Role> roles;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_permission", joinColumns = @JoinColumn(name = "user_id"))
     private List<UserPermissions> permissions;
+
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "user")
+    private List<Attachment> attachments;
+
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "book_id" , referencedColumnName = "id")
+    private Book book;
+
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "user")
+    private List<Review> reviews;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
