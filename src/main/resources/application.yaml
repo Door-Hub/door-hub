@@ -41,3 +41,6 @@ location:
   api:
     key: AIzaSyASrs5gXw6AhjPzj_b4kmELT5NroL1Lzd4
 
+
+upload:
+    dir: src\main\resources\pictures\profile\images

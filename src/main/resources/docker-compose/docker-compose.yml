@@ -1,5 +1,5 @@
 services:
-  leet-code-db:
+  code-db:
     image: postgres:16.1
     ports:
       - "1234:5432"

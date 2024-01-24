@@ -21,3 +21,4 @@ public class Review {
     private Integer categoryId;
     private Integer stars;
 }
+
