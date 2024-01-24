@@ -2,21 +2,52 @@ package org.example.doorhub.attachment;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.doorhub.attachment.dto.AttachmentBaseDto;
 import org.example.doorhub.attachment.dto.AttachmentResponseDto;
 import org.example.doorhub.attachment.dto.AttachmentUpdateDto;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.UnsupportedMediaTypeStatusException;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/attachment")
 @RequiredArgsConstructor
-public class AttachmentController
-{
+@Slf4j
+public class AttachmentController {
+
     private final AttachmentService attachmentService;
+
+
+    @PostMapping(name = "/opload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> uploadFile(@RequestParam("file")MultipartFile file) throws IOException {
+        switch (Objects.requireNonNull(file.getContentType())){
+            case MediaType.IMAGE_GIF_VALUE :
+            case MediaType.IMAGE_JPEG_VALUE:
+            case MediaType.IMAGE_PNG_VALUE: attachmentService.processImageUpload(file); break;
+            default:
+                log.error("Unsupported filetype: {}", file.getContentType());
+                throw new UnsupportedMediaTypeStatusException(
+                        String.format("Unsupported filetype: %s", file.getContentType()));
+
+        }
+
+        return ResponseEntity.ok(
+                String.format("File uploaded successfully: %s", file.getOriginalFilename()));
+    }
+
+
 
 
     @PostMapping

@@ -2,23 +2,59 @@ package org.example.doorhub.attachment;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.doorhub.attachment.dto.AttachmentBaseDto;
 import org.example.doorhub.attachment.dto.AttachmentResponseDto;
 import org.example.doorhub.attachment.dto.AttachmentUpdateDto;
 import org.example.doorhub.attachment.entity.Attachment;
 import org.example.doorhub.common.service.GenericCrudService;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 @Getter
+@Slf4j
 public class AttachmentService extends GenericCrudService<Attachment, Integer, AttachmentBaseDto, AttachmentUpdateDto, AttachmentUpdateDto, AttachmentResponseDto> {
 
     private final AttachmentRepository repository;
     private final AttachmentDtoMapper mapper;
     private final Class<Attachment> entityClass = Attachment.class;
     private final ModelMapper modelMapper;
+
+    @Value("${upload.dir}")
+    private String uploadDir;
+
+    public void processImageUpload(MultipartFile file) throws IOException {
+        if (file.isEmpty()) {
+            log.error("Empty file uploaded");
+            throw new IllegalArgumentException("Empty file uploaded");
+        }
+
+
+        try {
+            File destFile = Paths.get(uploadDir, file.getOriginalFilename()).toFile();
+            file.transferTo(destFile);
+            log.info("Uploaded: {}", destFile);
+
+            // Faylni qo'shishdan keyin FileEntity obyektini yaratish va bazaga saqlash
+            Attachment fileEntity = new Attachment();
+            fileEntity.setFileName(file.getOriginalFilename());
+
+            repository.save(fileEntity); // Bazaga saqlash
+        } catch (IOException e) {
+            log.error("Error uploading file: {}", e.getMessage());
+            throw new RuntimeException("Error uploading file", e);
+        }
+    }
 
 
     @Override
