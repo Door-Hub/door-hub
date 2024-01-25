@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: create review table
+      author: diyorbek2110@gmail.com
+      changes:
+        - sqlFile:
+            path: create-review-table.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: create user review table
+      author: diyorbek2110@gmail.com
+      changes:
+        - sqlFile:
+            path: create-user-review-table.sql
+            relativeToChangelogFile: true

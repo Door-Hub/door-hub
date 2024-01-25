@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: create attachment table
+      author: diyorbek2110@gmail.com
+      changes:
+        - sqlFile:
+            path: create-attachment-table.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: create user attachment table
+      author: diyorbek2110@gmail.com
+      changes:
+        - sqlFile:
+            path: create-user-attachment-table.sql
+            relativeToChangelogFile: true

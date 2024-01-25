@@ -23,8 +23,6 @@ spring:
       hibernate:
         show_sql: true
 
-    hibernate:
-      ddl-auto: update
 
   application:
     name: door-hub

@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - include:
+      file: changelog/user/create-user-table.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: changelog/address/create-address-table.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: changelog/attachment/create-attachment-table.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: changelog/book/create-book-table.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: changelog/category/create-category-table.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: changelog/role/create-role-table.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: changelog/review/create-review-table.yaml
+      relativeToChangelogFile: true
