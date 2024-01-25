@@ -18,7 +18,7 @@ public class UserCreateDto {
     private String lastname;
 
     @NotBlank
-    @Pattern(regexp = "^9989[0-9]{8}$", message = "Invalid phone number format")
+    @Pattern(regexp = "^9989[0-9]{8}$")
     private String phoneNumber;
 
 

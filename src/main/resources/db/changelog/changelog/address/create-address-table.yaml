@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: create address table
+      author: diyorbek2110@gmail.com
+      changes:
+        - sqlFile:
+            path: create-address-table.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: create user address table
+      author: diyorbek2110@gmail.com
+      changes:
+        - sqlFile:
+            path: create-user-address-table.sql
+            relativeToChangelogFile: true
