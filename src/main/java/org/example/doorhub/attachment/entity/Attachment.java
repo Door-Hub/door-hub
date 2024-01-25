@@ -11,16 +11,15 @@ import org.example.doorhub.user.entity.User;
 public class Attachment {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String fileName;
     private String OriginalFileName;
     private String url;
-
-    @Enumerated(EnumType.STRING)
-    private FileType fileType;
+    private String fileType;
 
     @ManyToOne
-    @JoinColumn(name = "user_id" , nullable = false)
+    @JoinColumn(name = "user_id")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private User user;

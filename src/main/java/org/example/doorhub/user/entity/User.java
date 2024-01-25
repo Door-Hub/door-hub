@@ -77,7 +77,7 @@ public class User implements UserDetails {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "book_id" , referencedColumnName = "id")
+    @JoinColumn(name = "book_id" )
     private Book book;
 
 

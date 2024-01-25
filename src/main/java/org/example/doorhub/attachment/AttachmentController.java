@@ -30,7 +30,7 @@ public class AttachmentController {
     private final AttachmentService attachmentService;
 
 
-    @PostMapping(name = "/opload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping( path = "/opload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> uploadFile(@RequestParam("file")MultipartFile file) throws IOException {
         switch (Objects.requireNonNull(file.getContentType())){
             case MediaType.IMAGE_GIF_VALUE :

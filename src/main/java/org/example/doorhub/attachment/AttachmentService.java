@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -45,11 +46,12 @@ public class AttachmentService extends GenericCrudService<Attachment, Integer, A
             file.transferTo(destFile);
             log.info("Uploaded: {}", destFile);
 
-            // Faylni qo'shishdan keyin FileEntity obyektini yaratish va bazaga saqlash
             Attachment fileEntity = new Attachment();
-            fileEntity.setFileName(file.getOriginalFilename());
-
-            repository.save(fileEntity); // Bazaga saqlash
+            fileEntity.setId(1);
+            fileEntity.setFileName(UUID.randomUUID() + file.getOriginalFilename());
+            fileEntity.setFileType(file.getContentType());
+            fileEntity.setOriginalFileName(file.getOriginalFilename());
+            repository.save(fileEntity);
         } catch (IOException e) {
             log.error("Error uploading file: {}", e.getMessage());
             throw new RuntimeException("Error uploading file", e);
@@ -58,16 +60,14 @@ public class AttachmentService extends GenericCrudService<Attachment, Integer, A
 
 
     @Override
-    protected Attachment save(AttachmentBaseDto attachmentBaseDto)
-    {
+    protected Attachment save(AttachmentBaseDto attachmentBaseDto) {
         Attachment attachment = mapper.toEntity(attachmentBaseDto);
         return repository.save(attachment);
     }
 
 
     @Override
-    protected Attachment updateEntity(AttachmentUpdateDto attachmentUpdateDto, Attachment attachment)
-    {
+    protected Attachment updateEntity(AttachmentUpdateDto attachmentUpdateDto, Attachment attachment) {
         mapper.update(attachmentUpdateDto, attachment);
         return repository.save(attachment);
     }
