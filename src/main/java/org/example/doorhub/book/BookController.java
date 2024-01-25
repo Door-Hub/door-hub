@@ -7,6 +7,8 @@ import org.example.doorhub.book.dto.BookCreateDto;
 import org.example.doorhub.book.dto.BookPatchDto;
 import org.example.doorhub.book.dto.BookResponseDto;
 import org.example.doorhub.book.dto.BookUpdateDto;
+import org.example.doorhub.user.UserRepository;
+import org.example.doorhub.user.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;

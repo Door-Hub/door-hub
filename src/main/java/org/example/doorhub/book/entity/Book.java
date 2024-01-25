@@ -16,8 +16,6 @@ public class Book {
 
     @Id
     private Integer id;
-    private Integer booker;
-    private Integer worker;
     private Double hourlyRate;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
@@ -26,5 +24,6 @@ public class Book {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToOne(mappedBy = "book")
-    private User user;
+    private User booker;
+
 }

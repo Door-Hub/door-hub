@@ -6,9 +6,7 @@ import org.example.doorhub.discount.entity.Discount;
 import org.example.doorhub.review.entity.Review;
 import org.example.doorhub.user.entity.User;
 
-import javax.swing.text.View;
 import java.util.List;
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
