@@ -53,15 +53,18 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
         User user = mapper.toEntity(userCreateDto);
         return repository.save(user);
     }
+
     @Override
     protected User updateEntity(UserUpdateDto userUpdateDto, User user) {
         mapper.update(userUpdateDto, user);
         return repository.save(user);
     }
+
     @Override
     public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
         return repository.findUserByPhoneNumber(phone).orElseThrow(() -> new BadCredentialsException("bad credentials"));
     }
+
     @Transactional
     public UserResponseDto signIn(UserSignInDto signInDto) {
         String phoneNumber = signInDto.getPhoneNumber();
@@ -78,6 +81,7 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
 
         return sendSms(mapper.toCreateDto(user));
     }
+
     @Transactional
     public UserResponseDto addUserAddress(Integer userid, Integer addressId) {
 
@@ -91,6 +95,7 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
         User save = repository.save(user);
         return mapper.toResponseDto(save);
     }
+
     @Transactional
     public UserResponseDto registerVerifyOtp(OtpVerifyDto verifyDto) {
 
@@ -110,6 +115,7 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
             throw new SmsVerificationException("Invalid verification code");
         }
     }
+
     @Transactional
     public UserResponseDto signInVerifyOtp(OtpVerifyDto verifyDto) {
         OTP otp = otpRepository
@@ -123,6 +129,7 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
             throw new SmsVerificationException("Invalid verification code");
         }
     }
+
     @Transactional
     public UserResponseDto register(UserCreateDto userCreateDto) throws CustomExceptionThisUsernameOlReadyTaken {
 
@@ -134,6 +141,7 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
         return sendSms(userCreateDto);
 
     }
+
     private UserResponseDto sendSms(UserCreateDto userCreateDto) {
 
         OTP otp = modelMapper.map(userCreateDto, OTP.class);
@@ -150,6 +158,7 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
             throw new ExceptionUNAUTHORIZED("Failed to send SMS");
         }
     }
+
     protected void validateUser(UserCreateDto req) throws CustomExceptionThisUsernameOlReadyTaken {
         Optional<OTP> otp = otpRepository.findById(req.getPhoneNumber());
 

@@ -1,7 +1,6 @@
 package org.example.doorhub.otp;
 
 
-import jakarta.persistence.EntityListeners;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

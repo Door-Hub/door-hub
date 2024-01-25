@@ -18,8 +18,6 @@ public class UserController {
 
     private final UserService userService;
 
-
-
     @GetMapping
     public ResponseEntity<Page<UserResponseDto>> getAllUser(Pageable pageable, @RequestParam(required = false) String predicate) {
         Page<UserResponseDto> all = userService.getAll(pageable, predicate);
