@@ -27,28 +27,28 @@ public class ReviewService {
     private final ModelMapper mapper;
     private final CategoryRepository categoryRepository;
 
-    public ReviewResponseDto create(Principal userId , ReviewCreateDto createDto) {
-            User user = userRepository.findById(createDto.getUserId()).orElseThrow(EntityNotFoundException::new);
+    public ReviewResponseDto create(Principal userId, ReviewCreateDto createDto) {
+        User user = userRepository.findById(createDto.getUserId()).orElseThrow(EntityNotFoundException::new);
 
-            Category category = categoryRepository.findById(createDto.getCategoryId()).orElseThrow(
-                    () -> new CustomCategoryNotFoundException("Category not found")
-            );
+        Category category = categoryRepository.findById(createDto.getCategoryId()).orElseThrow(
+                () -> new CustomCategoryNotFoundException("Category not found")
+        );
 
-            createDto.setUserId(user.getId());
-            createDto.setCategoryId(category.getId());
-            createDto.setStars(createDto.getStars()+1);
+        createDto.setUserId(user.getId());
+        createDto.setCategoryId(category.getId());
+        createDto.setStars(createDto.getStars() + 1);
 
         Review review = mapper.map(createDto, Review.class);
 
         reviewRepository.save(review);
 
-        category.setStars(Collections.singletonList(createDto.getStars()));
+        category.setStars(createDto.getStars());
 
         Category category1 = mapper.map(category, Category.class);
 
         categoryRepository.save(category1);
 
-        return mapper.map(createDto , ReviewResponseDto.class);
+        return mapper.map(createDto, ReviewResponseDto.class);
 
     }
 
@@ -56,15 +56,14 @@ public class ReviewService {
 
         Category category = categoryRepository.findById(id).orElseThrow(() -> new CustomCategoryNotFoundException("Category not found"));
 
-        List<Integer> stars = category.getStars();
+        Integer stars = category.getStars();
 
         List<ReviewResponseDto> reviewList = new ArrayList<>();
         ReviewResponseDto reviewResponseDto = new ReviewResponseDto();
 
-        for (Integer star : stars) {
-            reviewResponseDto.setStars(star);
-            reviewList.add(reviewResponseDto);
-        }
+
+        reviewResponseDto.setStars(stars);
+
         return reviewList;
     }
 }

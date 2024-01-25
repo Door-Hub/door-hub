@@ -19,7 +19,7 @@ public class Category {
     private Integer id;
     private String name;
     private String avatar;
-    private List<Integer> stars;
+    private Integer stars;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
