@@ -9,7 +9,6 @@ import org.example.doorhub.user.dto.UserUpdateDto;
 import org.example.doorhub.user.entity.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.Mapping;
 
 @Component
 @RequiredArgsConstructor
@@ -34,6 +33,6 @@ public class UserDtoMapper extends GenericDtoMapper<User, UserCreateDto, UserUpd
 
     @Override
     public UserCreateDto toCreateDto(User user) {
-      return   mapper.map(user, UserCreateDto.class);
+        return mapper.map(user, UserCreateDto.class);
     }
 }

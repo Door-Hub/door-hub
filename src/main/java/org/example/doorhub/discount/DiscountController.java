@@ -2,15 +2,10 @@ package org.example.doorhub.discount;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.doorhub.attachment.dto.AttachmentBaseDto;
-import org.example.doorhub.attachment.dto.AttachmentResponseDto;
 import org.example.doorhub.discount.dto.DiscountCreateDto;
 import org.example.doorhub.discount.dto.DiscountPatchDto;
 import org.example.doorhub.discount.dto.DiscountResponseDto;
 import org.example.doorhub.discount.dto.DiscountUpdateDto;
-import org.example.doorhub.user.dto.UserPatchDto;
-import org.example.doorhub.user.dto.UserResponseDto;
-import org.example.doorhub.user.dto.UserUpdateDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;

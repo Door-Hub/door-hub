@@ -8,13 +8,10 @@ import org.example.doorhub.otp.dto.OtpVerifyDto;
 import org.example.doorhub.user.dto.UserCreateDto;
 import org.example.doorhub.user.dto.UserResponseDto;
 import org.example.doorhub.user.dto.UserSignInDto;
-import org.example.doorhub.user.dto.UserSignInResponseDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")

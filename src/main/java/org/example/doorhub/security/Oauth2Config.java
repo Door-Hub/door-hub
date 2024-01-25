@@ -1,6 +1,5 @@
 package org.example.doorhub.security;
 
-import org.example.doorhub.jwt.JwtSecurityFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
