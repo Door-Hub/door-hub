@@ -1,14 +1,8 @@
 package org.example.doorhub.attachment;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.doorhub.attachment.dto.AttachmentBaseDto;
 import org.example.doorhub.attachment.dto.AttachmentResponseDto;
-import org.example.doorhub.attachment.dto.AttachmentUpdateDto;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,73 +12,49 @@ import org.springframework.web.server.UnsupportedMediaTypeStatusException;
 import java.io.IOException;
 import java.util.Objects;
 
-@RestController
-@RequestMapping("/attachment")
-@RequiredArgsConstructor
 @Slf4j
+@RestController
+@RequestMapping("api/files")
+@RequiredArgsConstructor
 public class AttachmentController {
+    private final AttachmentService service;
 
-    private final AttachmentService attachmentService;
 
-
-    @PostMapping( path = "/opload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> uploadFile(@RequestParam("file")MultipartFile file) throws IOException {
-        switch (Objects.requireNonNull(file.getContentType())){
-            case MediaType.IMAGE_GIF_VALUE:
-            case MediaType.IMAGE_JPEG_VALUE:
-            case MediaType.IMAGE_PNG_VALUE: attachmentService.processImageUpload(file); break;
-            default:
+    @PostMapping(value = "/opload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AttachmentResponseDto> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("userId") Integer userId) throws IOException {
+        return switch (Objects.requireNonNull(file.getContentType())) {
+            case MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE -> {
+                AttachmentResponseDto attachmentResponseDto = service.processImageUpload(file, userId);
+                yield ResponseEntity.ok(attachmentResponseDto);
+            }
+            default -> {
                 log.error("Unsupported filetype: {}", file.getContentType());
                 throw new UnsupportedMediaTypeStatusException(
                         String.format("Unsupported filetype: %s", file.getContentType()));
+            }
+        };
 
-        }
-
-        return ResponseEntity.ok(
-                String.format("File uploaded successfully: %s", file.getOriginalFilename()));
     }
 
+    @PutMapping(value = "/opload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AttachmentResponseDto> updateFile(@RequestParam("file") MultipartFile file, @RequestParam("userId") Integer userId) throws IOException {
+        return switch (Objects.requireNonNull(file.getContentType())) {
+            case MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE -> {
+                AttachmentResponseDto attachmentResponseDto = service.processImageUpdate(file, userId);
+                yield ResponseEntity.ok(attachmentResponseDto);
+            }
+            default -> {
+                log.error("Unsupported filetype: {}", file.getContentType());
+                throw new UnsupportedMediaTypeStatusException(
+                        String.format("Unsupported filetype: %s", file.getContentType()));
+            }
+        };
 
-
-
-    @PostMapping
-    public ResponseEntity<AttachmentResponseDto> createAttachment(@RequestBody @Valid AttachmentBaseDto attachmentBaseDto) {
-        AttachmentResponseDto attachmentResponseDto = attachmentService.create(attachmentBaseDto);
-        return ResponseEntity
-                .ok(attachmentResponseDto);
     }
 
-    @GetMapping
-    public ResponseEntity<Page<AttachmentResponseDto>> getAllAttachment(Pageable pageable, @RequestParam(required = false) String predicate) {
-        Page<AttachmentResponseDto> all = attachmentService.getAll(pageable, predicate);
-        return ResponseEntity.ok(all);
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<?> delete(@RequestParam Integer userId) {
+        service.deleteAttachment(userId);
+        return ResponseEntity.noContent().build();
     }
-
-
-    @GetMapping("/{id}")
-    public ResponseEntity<AttachmentResponseDto> getAttachment(@PathVariable Integer id) {
-        AttachmentResponseDto responseDto = attachmentService.getById(id);
-        return ResponseEntity.ok(responseDto);
-    }
-
-
-    @PutMapping("/{id}")
-    public ResponseEntity<AttachmentResponseDto> updateAttachment(@PathVariable Integer id, @RequestBody @Valid AttachmentUpdateDto updateDto) {
-        AttachmentResponseDto responseDto = attachmentService.update(id, updateDto);
-        return ResponseEntity.ok(responseDto);
-    }
-
-
-    @PatchMapping("/{id}")
-    public ResponseEntity<AttachmentResponseDto> patchAttachment(@PathVariable Integer id, @RequestBody AttachmentUpdateDto patchDto) throws NoSuchFieldException, IllegalAccessException {
-        AttachmentResponseDto responseDto = attachmentService.patch(id, patchDto);
-        return ResponseEntity.ok(responseDto);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteAttachment(@PathVariable Integer id) {
-        attachmentService.delete(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-
 }
