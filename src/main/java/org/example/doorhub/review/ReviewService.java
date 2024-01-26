@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -28,6 +27,7 @@ public class ReviewService {
     private final CategoryRepository categoryRepository;
 
     public ReviewResponseDto create(Principal userId, ReviewCreateDto createDto) {
+
         User user = userRepository.findById(createDto.getUserId()).orElseThrow(EntityNotFoundException::new);
 
         Category category = categoryRepository.findById(createDto.getCategoryId()).orElseThrow(

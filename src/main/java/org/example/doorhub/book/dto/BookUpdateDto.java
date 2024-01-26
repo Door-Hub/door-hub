@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Data
 public class BookUpdateDto {
 
-    private Integer booker;
     private Integer worker;
     private Double hourlyRate;
     private LocalDateTime startDate;

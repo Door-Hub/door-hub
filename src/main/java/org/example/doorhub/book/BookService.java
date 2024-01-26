@@ -11,6 +11,7 @@ import org.example.doorhub.book.entity.Book;
 import org.example.doorhub.common.service.GenericCrudService;
 import org.example.doorhub.user.UserRepository;
 import org.example.doorhub.user.entity.User;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,12 +26,13 @@ public class BookService extends GenericCrudService<Book, Integer, BookCreateDto
 
     @Override
     protected Book save(BookCreateDto bookCreateDto) {
-        User user = userRepository.findById(bookCreateDto.getBooker())
+        User booker = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User worker = userRepository.findById(bookCreateDto.getWorker())
                 .orElseThrow(() -> new EntityNotFoundException("user not found"));
         Book booking = mapper.toEntity(bookCreateDto);
-        booking.setBooker(user);
+        booking.setWorker(worker);
+        booking.setBooker(booker);
         return repository.save(booking);
-
     }
 
     @Override

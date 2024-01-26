@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Data
 public class DiscountUpdateDto {
 
+    private Integer categoryId;
     private int percentage;
     private LocalDateTime startDate;
     private LocalDateTime endDate;

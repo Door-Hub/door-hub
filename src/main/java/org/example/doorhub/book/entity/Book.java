@@ -24,6 +24,11 @@ public class Book {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToOne(mappedBy = "book")
+    private User worker;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToOne(mappedBy = "book")
     private User booker;
 
 }
