@@ -1,3 +1,5 @@
+# Google  # GitHub  # Facebook
+
 server:
   port: 8080
 spring:
@@ -6,12 +8,14 @@ spring:
       client:
         registration:
           google:
-            clientId: 116281926130-r9qvadd7506ovr9q32lqq7r2qq27m260.apps.googleusercontent.com
-            clientSecret: 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
+            client-id: 116281926130-r9qvadd7506ovr9q32lqq7r2qq27m260.apps.googleusercontent.com
+            client-secret: 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
           github:
-            clientId: 64b35f7b4e47d459a3de
-            clientSecret: e98d3b02183478ce71ec000e5a26fe2857f8ba7c
-
+            client-id: 3a3bd55b1ab6054f3b18
+            client-secret: 9cc94fc63105ee60eafa6294ebe660caae370239
+          facebook:
+            client-id: 1504689346758899
+            client-secret: bbf4ca1ea0ead55c52ef25d43f618527
   datasource:
     url: jdbc:postgresql://localhost:1234/postgres
     password: postgres
@@ -41,6 +45,6 @@ location:
   api:
     key: AIzaSyASrs5gXw6AhjPzj_b4kmELT5NroL1Lzd4
 
-
-upload:
-    dir: src\main\resources\pictures\profile\images
+service:
+   upload:
+      dir: src\main\resources\pictures\profile\images

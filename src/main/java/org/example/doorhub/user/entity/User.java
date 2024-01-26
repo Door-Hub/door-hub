@@ -70,8 +70,8 @@ public class User implements UserDetails {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "user")
-    private List<Attachment> attachments;
+    @OneToOne(mappedBy = "user")
+    private Attachment attachments;
 
 
     @ToString.Exclude

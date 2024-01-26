@@ -4,24 +4,33 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.example.doorhub.user.entity.User;
 
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
+@Table(name = "attachment")
 public class Attachment {
-
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String fileName;
-    private String OriginalFileName;
+
+    @Column(nullable = false)
+    private String file_name;
+
+    @Column(nullable = false)
+    private String fileType;
+
     private String url;
 
-    @Enumerated(EnumType.STRING)
-    private FileType fileType;
+    @Column(nullable = false)
+    private LocalDateTime uploadTime;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id" , nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+
 }
