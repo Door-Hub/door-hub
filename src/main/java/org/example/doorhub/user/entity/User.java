@@ -8,8 +8,6 @@ import org.example.doorhub.book.entity.Book;
 import org.example.doorhub.category.entity.Category;
 import org.example.doorhub.listeners.UserCreatedUpdated;
 import org.example.doorhub.review.entity.Review;
-import org.example.doorhub.user.permission.UserPermissions;
-import org.example.doorhub.user.role.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,9 +15,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -55,19 +53,8 @@ public class User implements UserDetails {
     @ToString.Exclude
     private List<Category> categories;
 
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role"))
+    @Enumerated(EnumType.STRING)
     private List<Role> roles;
-
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_permission", joinColumns = @JoinColumn(name = "user_id"))
-    private List<UserPermissions> permissions;
 
 
     @ToString.Exclude
@@ -79,7 +66,7 @@ public class User implements UserDetails {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "book_id" )
+    @JoinColumn(name = "book_id")
     private Book book;
 
 
@@ -90,18 +77,14 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
-        Set<SimpleGrantedAuthority> collect = roles.stream()
-                .map(role -> role.getPermissions().stream())
-                .map(permissions -> new SimpleGrantedAuthority(permissions.toString()))
-                .collect(Collectors.toSet());
-
-        Set<SimpleGrantedAuthority> permission =
-                permissions.stream().map(permissions -> new SimpleGrantedAuthority(permissions.toString())).collect(Collectors.toSet());
-
-        collect.addAll(permission);
-
-        return collect;
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        for (Role role : roles) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
+            for (Permission permission : role.getPermissions()) {
+                authorities.add(new SimpleGrantedAuthority(permission.toString()));
+            }
+        }
+        return authorities;
     }
 
     @Override
