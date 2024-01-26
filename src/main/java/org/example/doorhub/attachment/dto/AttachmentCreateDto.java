@@ -3,15 +3,14 @@ package org.example.doorhub.attachment.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.doorhub.user.entity.User;
 
+import java.net.URL;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class AttachmentResponseDto {
-    private Integer id;
+public class AttachmentCreateDto {
 
     private String file_name;
 
@@ -21,5 +20,4 @@ public class AttachmentResponseDto {
 
     private LocalDateTime uploadTime;
 
-    private User user;
 }

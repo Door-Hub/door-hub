@@ -1,13 +1,13 @@
 package org.example.doorhub.attachment;
 
-import lombok.Getter;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.doorhub.attachment.dto.AttachmentBaseDto;
 import org.example.doorhub.attachment.dto.AttachmentResponseDto;
-import org.example.doorhub.attachment.dto.AttachmentUpdateDto;
 import org.example.doorhub.attachment.entity.Attachment;
-import org.example.doorhub.common.service.GenericCrudService;
+import org.example.doorhub.common.exception.AttachmentNotFound;
+import org.example.doorhub.user.UserRepository;
+import org.example.doorhub.user.entity.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,25 +15,24 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Getter
-@Slf4j
-public class AttachmentService extends GenericCrudService<Attachment, Integer, AttachmentBaseDto, AttachmentUpdateDto, AttachmentUpdateDto, AttachmentResponseDto> {
+public class AttachmentService {
 
-    private final AttachmentRepository repository;
-    private final AttachmentDtoMapper mapper;
-    private final Class<Attachment> entityClass = Attachment.class;
-    private final ModelMapper modelMapper;
+    private final AttachmentRepository attachmentRepository;
+    private final UserRepository userRepository;
+    private final ModelMapper mapper;
 
-    @Value("${upload.dir}")
+    @Value("${service.upload.dir}")
     private String uploadDir;
 
-    public void processImageUpload(MultipartFile file) throws IOException {
+    public AttachmentResponseDto processImageUpload(MultipartFile file, Integer userId) throws IOException {
         if (file.isEmpty()) {
             log.error("Empty file uploaded");
             throw new IllegalArgumentException("Empty file uploaded");
@@ -45,11 +44,23 @@ public class AttachmentService extends GenericCrudService<Attachment, Integer, A
             file.transferTo(destFile);
             log.info("Uploaded: {}", destFile);
 
-            // Faylni qo'shishdan keyin FileEntity obyektini yaratish va bazaga saqlash
-            Attachment fileEntity = new Attachment();
-            fileEntity.setFileName(file.getOriginalFilename());
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-            repository.save(fileEntity); // Bazaga saqlash
+            Attachment attachment = new Attachment();
+            attachment.setFile_name(file.getOriginalFilename());
+            attachment.setFileType(Objects.requireNonNull(file.getContentType()));
+            attachment.setUrl(String.valueOf(Paths.get(uploadDir, file.getOriginalFilename())));
+            attachment.setUploadTime(LocalDateTime.now());
+            attachment.setUser(user);
+
+            Attachment saved = attachmentRepository.save(attachment);
+
+            user.setAttachment(saved);
+
+            userRepository.save(user);
+
+            return mapper.map(saved, AttachmentResponseDto.class);
         } catch (IOException e) {
             log.error("Error uploading file: {}", e.getMessage());
             throw new RuntimeException("Error uploading file", e);
@@ -57,20 +68,57 @@ public class AttachmentService extends GenericCrudService<Attachment, Integer, A
     }
 
 
-    @Override
-    protected Attachment save(AttachmentBaseDto attachmentBaseDto)
-    {
-        Attachment attachment = mapper.toEntity(attachmentBaseDto);
-        return repository.save(attachment);
+    public AttachmentResponseDto processImageUpdate(MultipartFile file, Integer userId) {
+
+        if (file.isEmpty()) {
+            log.error("Empty file uploaded");
+            throw new IllegalArgumentException("Empty file uploaded");
+        }
+
+        try{
+            File destFile = Paths.get(uploadDir, file.getOriginalFilename()).toFile();
+            file.transferTo(destFile);
+            log.info("Uploaded: {}", destFile);
+
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            Attachment attachment =  user.getAttachment();
+            String url = attachment.getUrl();
+            deleteFile(url);
+
+            attachment.setId(attachment.getId());
+            attachment.setFile_name(file.getOriginalFilename());
+            attachment.setFileType(Objects.requireNonNull(file.getContentType()));
+            attachment.setUrl(String.valueOf(Paths.get(uploadDir, file.getOriginalFilename())));
+            attachment.setUploadTime(LocalDateTime.now());
+            attachment.setUser(user);
+
+            Attachment saved = attachmentRepository.save(attachment);
+
+            return mapper.map(saved, AttachmentResponseDto.class);
+
+        } catch (IOException e){
+            log.error("Error uploading file: {}", e.getMessage());
+            throw new RuntimeException("Error uploading file", e);
+        }
     }
 
 
-    @Override
-    protected Attachment updateEntity(AttachmentUpdateDto attachmentUpdateDto, Attachment attachment)
-    {
-        mapper.update(attachmentUpdateDto, attachment);
-        return repository.save(attachment);
+    private void deleteFile(String filePath) {
+        try {
+            Files.deleteIfExists(Paths.get(filePath));
+        } catch (IOException e) {
+            log.error("Error deleting file: {}", e.getMessage());
+            throw new RuntimeException("Error deleting file", e);
+        }
     }
 
 
+    public void deleteAttachment(Integer userId) {
+        Attachment attachment = attachmentRepository.findByUserId(userId).orElseThrow(() -> new AttachmentNotFound("Could not find attachment"));
+        attachmentRepository.deleteById(attachment.getId());
+        deleteFile(attachment.getUrl());
+
+    }
 }

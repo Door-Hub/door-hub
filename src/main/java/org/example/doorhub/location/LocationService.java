@@ -20,7 +20,6 @@ public class LocationService {
         LocationResponse location = locationAPIFeign.getLocation(LOCATION_KEY,
                 latitude.toString() + "," + longitude.toString());
         return location.getResults().get(0).toString();
-
     }
 
 

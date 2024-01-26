@@ -1,5 +1,6 @@
 package org.example.doorhub.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.doorhub.address.entity.Address;
@@ -68,10 +69,11 @@ public class User implements UserDetails {
     private List<UserPermissions> permissions;
 
 
+    @JsonIgnore
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "user")
-    private List<Attachment> attachments;
+    @OneToOne( cascade = CascadeType.ALL)
+    private Attachment attachment;
 
 
     @ToString.Exclude

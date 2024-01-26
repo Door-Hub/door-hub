@@ -61,9 +61,10 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
     }
 
     @Override
-    public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
-        return repository.findUserByPhoneNumber(phone).orElseThrow(() -> new BadCredentialsException("bad credentials"));
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return repository.findUserByPhoneNumber(email).orElseThrow(() -> new BadCredentialsException("bad credentials"));
     }
+
 
     @Transactional
     public UserResponseDto signIn(UserSignInDto signInDto) {

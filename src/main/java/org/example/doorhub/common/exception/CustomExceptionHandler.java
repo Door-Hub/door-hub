@@ -179,4 +179,16 @@ public class CustomExceptionHandler
                         .build());
     }
 
+    @ExceptionHandler(value = AttachmentNotFound.class)
+    public ResponseEntity<CustomErrorResponse> handleSmsAlreadySentException(AttachmentNotFound e) {
+        log.error(e.getMessage(), e);
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(CustomErrorResponse.builder()
+                        .message(e.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .status(HttpStatus.NOT_FOUND)
+                        .build());
+    }
+
 }
