@@ -6,10 +6,3 @@ databaseChangeLog:
         - sqlFile:
             path: create-book-table.sql
             relativeToChangelogFile: true
-  - changeSet:
-      id: create user book table
-      author: diyorbek2110@gmail.com
-      changes:
-        - sqlFile:
-            path: create-user-book-table.sql
-            relativeToChangelogFile: true

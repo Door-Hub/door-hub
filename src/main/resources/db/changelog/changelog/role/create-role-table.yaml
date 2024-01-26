@@ -7,13 +7,6 @@ databaseChangeLog:
             path: create-role-table.sql
             relativeToChangelogFile: true
   - changeSet:
-      id: create user-permission table
-      author: diyorbek2110@gmail.com
-      changes:
-        - sqlFile:
-            path: create-user-permission-table.sql
-            relativeToChangelogFile: true
-  - changeSet:
       id: create role-permission table
       author: diyorbek2110@gmail.com
       changes:

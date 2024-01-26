@@ -6,13 +6,6 @@ databaseChangeLog:
         - sqlFile:
             path: create-category-table.sql
             relativeToChangelogFile: true
-  - changeSet:
-      id: create user category table
-      author: diyorbek2110@gmail.com
-      changes:
-        - sqlFile:
-            path: create-user-category.sql
-            relativeToChangelogFile: true
 #  - changeSet:
 #      id: create category stars table
 #      author: diyorbek2110@gmail.com
