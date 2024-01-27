@@ -12,4 +12,6 @@ public class CategoryPatchDto {
     private String name;
     private String avatar;
     private Integer stars;
+    private Integer user;
+    private Integer parentCategory;
 }

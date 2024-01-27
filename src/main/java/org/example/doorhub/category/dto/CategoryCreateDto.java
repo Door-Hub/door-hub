@@ -9,8 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CategoryCreateDto {
+
     private String name;
     private String avatar;
     private Integer stars;
+    private Integer userId;
+    private Integer parentCategoryId;
 
 }

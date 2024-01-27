@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 @Data
 public class UserSignInResponseDto {
 
-    @NotBlank
     private String token;
 }

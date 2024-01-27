@@ -26,7 +26,7 @@ public class UserPatchDto {
     @NotBlank
     private String email;
 
-
+    @NotBlank
     private String gender;
 
     private LocalDate brithDate;

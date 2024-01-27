@@ -15,4 +15,6 @@ public class CategoryResponseDto {
     private String name;
     private String avatar;
     private Integer stars;
+    private Integer user;
+    private Integer parentCategory;
 }

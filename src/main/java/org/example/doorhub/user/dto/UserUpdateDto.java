@@ -21,9 +21,9 @@ public class UserUpdateDto {
     @NotBlank
     @Pattern(regexp = "^9989[0-9]{8}$", message = "Invalid phone number format")
     private String phoneNumber;
-    @NotBlank
     @Email
     private String email;
+    @NotBlank
     private String gender;
     private LocalDate brithDate;
     private String avatar;

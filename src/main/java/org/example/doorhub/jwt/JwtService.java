@@ -29,7 +29,7 @@ public class JwtService {
                 .signWith(signKey())
                 .setIssuedAt(Date.from(Instant.now()))
                 .setExpiration(Date.from(Instant.now().plus(3, ChronoUnit.DAYS)))
-                .setIssuer("www.hot-desk.com")
+                .setIssuer("www.door-hob.com")
                 .compact();
     }
 

@@ -1,5 +1,6 @@
 package org.example.doorhub.discount.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,7 @@ import java.util.UUID;
 @Data
 public class DiscountCreateDto {
 
+    @NotNull
     private Integer categoryId;
     private int percentage;
     private LocalDateTime startDate;

@@ -21,11 +21,10 @@ public class UserCreateDto {
     @Pattern(regexp = "^9989[0-9]{8}$")
     private String phoneNumber;
 
-
-    @NotBlank
     @Email
     private String email;
 
+    @NotBlank
     private String gender;
 
 
