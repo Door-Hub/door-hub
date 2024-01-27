@@ -3,6 +3,8 @@ package org.example.doorhub.category;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.doorhub.category.dto.*;
+import org.example.doorhub.category.parent.dto.ParentCategoryCreateDto;
+import org.example.doorhub.category.parent.dto.ParentCategoryResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -21,11 +23,6 @@ public class CategoryController {
         return ResponseEntity.ok(categoryResponseDto);
     }
 
-    @PostMapping("/parent-category")
-    public ResponseEntity<ParentCategoryResponseDto> createParentCategory(@RequestBody @Valid ParentCategoryCreateDto categoryCreateDto) {
-        ParentCategoryResponseDto categoryResponseDto = service.createParentCategory(categoryCreateDto);
-        return ResponseEntity.ok(categoryResponseDto);
-    }
 
     @GetMapping
     public ResponseEntity<Page<CategoryResponseDto>> getAllCategory(Pageable pageable, @RequestParam(required = false) String predicate) {

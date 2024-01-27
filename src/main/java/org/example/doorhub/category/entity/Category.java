@@ -2,9 +2,8 @@ package org.example.doorhub.category.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.doorhub.category.parent.entity.ParentCategory;
 import org.example.doorhub.discount.entity.Discount;
-import org.example.doorhub.review.entity.Review;
-import org.example.doorhub.user.entity.User;
 
 import java.util.List;
 
@@ -16,21 +15,11 @@ import java.util.List;
 public class Category {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
     private String avatar;
-    private Integer stars;
 
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "category")
-    private List<Review> views;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private User user;
 
     @OneToMany(mappedBy = "category")
     @EqualsAndHashCode.Exclude
@@ -40,12 +29,8 @@ public class Category {
     @OneToMany(mappedBy = "parentCategory")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private List<Category> categoryList;
+    private List<ParentCategory> parentCategories;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private Category parentCategory;
+
 
 }

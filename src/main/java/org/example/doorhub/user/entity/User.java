@@ -6,6 +6,7 @@ import org.example.doorhub.address.entity.Address;
 import org.example.doorhub.attachment.entity.Attachment;
 import org.example.doorhub.book.entity.Book;
 import org.example.doorhub.category.entity.Category;
+import org.example.doorhub.category.parent.entity.ParentCategory;
 import org.example.doorhub.listeners.UserCreatedUpdated;
 import org.example.doorhub.review.entity.Review;
 import org.springframework.security.core.GrantedAuthority;
@@ -51,7 +52,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private List<Category> categories;
+    private List<ParentCategory> categories;
 
     @Enumerated(EnumType.STRING)
     private List<Role> roles;

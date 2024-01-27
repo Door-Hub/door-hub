@@ -6,11 +6,14 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.doorhub.category.dto.*;
 import org.example.doorhub.category.entity.Category;
+import org.example.doorhub.category.parent.ParentRepository;
+import org.example.doorhub.category.parent.dto.ParentCategoryCreateDto;
+import org.example.doorhub.category.parent.dto.ParentCategoryResponseDto;
+import org.example.doorhub.category.parent.entity.ParentCategory;
 import org.example.doorhub.common.service.GenericCrudService;
 import org.example.doorhub.user.UserRepository;
 import org.example.doorhub.user.entity.User;
 import org.modelmapper.ModelMapper;
-import org.springframework.core.io.ContextResource;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -25,38 +28,26 @@ public class CategoryService extends GenericCrudService<Category, Integer, Categ
     private final Class<Category> EntityClass = Category.class;
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final ParentRepository parentRepository;
 
     @Override
     protected Category save(CategoryCreateDto categoryCreateDto) {
 
-        Category parentCategory = repository.findById(categoryCreateDto.getParentCategoryId())
+        ParentCategory parentCategory = parentRepository.findById(categoryCreateDto.getParentCategoryId())
                 .orElseThrow(() -> new EntityNotFoundException("category id not found"));
 
         Category category = mapper.toEntity(categoryCreateDto);
-        category.setParentCategory(parentCategory);
+        category.getParentCategories().add(parentCategory);
         return repository.save(category);
     }
 
-    @Transactional
-    public ParentCategoryResponseDto createParentCategory(ParentCategoryCreateDto parentCategoryCreateDto) {
-
-        User user = userRepository.findById(parentCategoryCreateDto.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException("user id not found"));
-
-        Category category = modelMapper.map(parentCategoryCreateDto, Category.class);
-
-        category.setUser(user);
-        Category save = repository.save(category);
-
-        return modelMapper.map(save, ParentCategoryResponseDto.class);
-    }
 
     @Override
     protected Category updateEntity(CategoryUpdateDto categoryUpdateDto, Category category) {
 
         Optional<User> user = userRepository.findById(categoryUpdateDto.getUserId());
+        Optional<ParentCategory> parentCategory = parentRepository.findById(categoryUpdateDto.getParentCategoryId());
 
-        Optional<Category> parentCategory = repository.findById(categoryUpdateDto.getParentCategoryId());
         if (user.isPresent() && parentCategory.isPresent()) {
             mapper.update(categoryUpdateDto, category);
             return repository.save(category);

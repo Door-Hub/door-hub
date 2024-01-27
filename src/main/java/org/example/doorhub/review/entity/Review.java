@@ -4,6 +4,7 @@ package org.example.doorhub.review.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.doorhub.category.entity.Category;
+import org.example.doorhub.category.parent.entity.ParentCategory;
 import org.example.doorhub.user.entity.User;
 
 @AllArgsConstructor
@@ -27,8 +28,8 @@ public class Review {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @ManyToOne
-    @JoinColumn(name = "categorys_id", nullable = false)
-    private Category category;
+    @JoinColumn(name = "parent_category_id")
+    private ParentCategory parentCategory;
 
 }
 
