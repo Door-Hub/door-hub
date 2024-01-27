@@ -15,17 +15,24 @@ import static org.springframework.security.config.Customizer.*;
 @EnableMethodSecurity
 public class SecurityConfiguration {
 
-    final String MATCHERS=
+    final String MATCHERS =
             """
-            /swagger-ui.html",
-            "/swagger-ui/**",
-            "/v3/api-docs/**",
-            "/swagger-resources/**",
-            "/webjars/** ,
-            "/**" ,
-            "/oauth2/**",
-            "/login/**"
-                    """;
+                    /swagger-ui.html",
+                    "/swagger-ui/**",
+                    "/v3/api-docs/**",
+                    "/swagger-resources/**",
+                    "/webjars/** ,
+                    "/**" ,
+                    "/oauth2/**",
+                    "/login/**",
+                                
+                    "/category/**",
+                    "/user/**",
+                    "/book/**",
+                    "/discount/**",
+                    "/review/**"
+                               
+                            """;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -35,8 +42,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(
                         registry -> {
                             registry.requestMatchers(MATCHERS)
-                            .permitAll()
-                            .anyRequest().authenticated();
+                                    .permitAll()
+                                    .anyRequest().authenticated();
                         }
                 )
                 .oauth2Login(withDefaults())
@@ -45,6 +52,7 @@ public class SecurityConfiguration {
 //                .addFilterBefore(jwtSecurityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(8);

@@ -43,7 +43,7 @@ public class Category {
     private List<Category> categoryList;
 
     @ManyToOne
-    @JoinColumn(name = "categorys_id")
+    @JoinColumn(name = "category_id")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Category parentCategory;

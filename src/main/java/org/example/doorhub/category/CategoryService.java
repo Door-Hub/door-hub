@@ -1,16 +1,16 @@
 package org.example.doorhub.category;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.example.doorhub.category.dto.CategoryCreateDto;
-import org.example.doorhub.category.dto.CategoryPatchDto;
-import org.example.doorhub.category.dto.CategoryResponseDto;
-import org.example.doorhub.category.dto.CategoryUpdateDto;
+import org.example.doorhub.category.dto.*;
 import org.example.doorhub.category.entity.Category;
 import org.example.doorhub.common.service.GenericCrudService;
 import org.example.doorhub.user.UserRepository;
 import org.example.doorhub.user.entity.User;
+import org.modelmapper.ModelMapper;
+import org.springframework.core.io.ContextResource;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -24,19 +24,31 @@ public class CategoryService extends GenericCrudService<Category, Integer, Categ
     private final CategoryMapperDto mapper;
     private final Class<Category> EntityClass = Category.class;
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     protected Category save(CategoryCreateDto categoryCreateDto) {
-        User user = userRepository.findById(categoryCreateDto.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException("user id not found"));
 
         Category parentCategory = repository.findById(categoryCreateDto.getParentCategoryId())
                 .orElseThrow(() -> new EntityNotFoundException("category id not found"));
 
         Category category = mapper.toEntity(categoryCreateDto);
-        category.setUser(user);
         category.setParentCategory(parentCategory);
         return repository.save(category);
+    }
+
+    @Transactional
+    public ParentCategoryResponseDto createParentCategory(ParentCategoryCreateDto parentCategoryCreateDto) {
+
+        User user = userRepository.findById(parentCategoryCreateDto.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("user id not found"));
+
+        Category category = modelMapper.map(parentCategoryCreateDto, Category.class);
+
+        category.setUser(user);
+        Category save = repository.save(category);
+
+        return modelMapper.map(save, ParentCategoryResponseDto.class);
     }
 
     @Override

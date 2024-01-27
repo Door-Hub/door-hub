@@ -11,10 +11,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class CategoryResponseDto {
 
-    private UUID id;
+    private Integer id;
     private String name;
     private String avatar;
-    private Integer stars;
-    private Integer user;
     private Integer parentCategory;
 }
