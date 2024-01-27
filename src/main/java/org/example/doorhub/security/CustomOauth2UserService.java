@@ -28,7 +28,6 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
         String picture = (String) attributes.get("picture");
         String avatarUrl = (String) attributes.get("avatar_url");
 
-
         System.out.println("attributes = " + attributes);
         Optional<User> user = userRepository.findUserByEmail(email);
         if (user.isEmpty()){
@@ -36,7 +35,6 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
             newUser.setEmail(email);
             newUser.setFirstname(name);
             newUser.setAvatar(picture);
-            newUser.setAvatar(avatarUrl);
             userRepository.save(newUser);
         }
         return oAuth2User;
