@@ -13,12 +13,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
     private final UserService userService;
     private final JwtService jwtService;
+
+    @GetMapping("/me")
+    public Principal principal(Principal principal){
+        return principal;
+    }
 
     @PostMapping("/register")
     public ResponseEntity<UserResponseDto> register(@RequestBody @Valid UserCreateDto userRegisterRequestDto) throws CustomExceptionThisUsernameOlReadyTaken {

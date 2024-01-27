@@ -8,6 +8,9 @@ spring:
           google:
             client-id: 116281926130-r9qvadd7506ovr9q32lqq7r2qq27m260.apps.googleusercontent.com
             client-secret: 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
+            scope:
+              - email
+              - profile
           github:
             client-id: 3a3bd55b1ab6054f3b18
             client-secret: 9c58751edfa9f9b90a757a4ec23962537b26a2d7

@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.doorhub.attachment.dto.AttachmentResponseDto;
 import org.example.doorhub.attachment.entity.Attachment;
-import org.example.doorhub.common.exception.AttachmentNotFound;
 import org.example.doorhub.user.UserRepository;
 import org.example.doorhub.user.entity.User;
 import org.modelmapper.ModelMapper;
