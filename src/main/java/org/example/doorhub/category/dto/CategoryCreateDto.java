@@ -12,5 +12,4 @@ public class CategoryCreateDto {
 
     private String name;
     private String avatar;
-    private Integer parentCategoryId;
 }

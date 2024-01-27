@@ -27,7 +27,7 @@ public class ParentCategory {
     @JoinColumn(name = "category_id")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private Category parentCategory;
+    private Category category;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

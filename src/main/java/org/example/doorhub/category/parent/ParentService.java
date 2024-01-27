@@ -3,6 +3,8 @@ package org.example.doorhub.category.parent;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.example.doorhub.category.CategoryRepository;
+import org.example.doorhub.category.entity.Category;
 import org.example.doorhub.category.parent.dto.ParentCategoryCreateDto;
 import org.example.doorhub.category.parent.dto.ParentCategoryPathDto;
 import org.example.doorhub.category.parent.dto.ParentCategoryResponseDto;
@@ -23,6 +25,7 @@ public class ParentService extends GenericCrudService<ParentCategory, Integer, P
     private final ParentMapperDto mapper;
     private final Class<ParentCategory> EntityClass = ParentCategory.class;
     private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
 
     @Override
     protected ParentCategory save(ParentCategoryCreateDto parentCategoryCreateDto) {
@@ -30,9 +33,13 @@ public class ParentService extends GenericCrudService<ParentCategory, Integer, P
         User user = userRepository.findById(parentCategoryCreateDto.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("user id not found"));
 
+        Category category = categoryRepository.findById(parentCategoryCreateDto.getCategoryId())
+                .orElseThrow(() -> new EntityNotFoundException("user id not found"));
+
 
         ParentCategory parentCategory = mapper.toEntity(parentCategoryCreateDto);
         parentCategory.setUser(user);
+        parentCategory.setCategory(category);
         return repository.save(parentCategory);
     }
 

@@ -5,6 +5,7 @@ import lombok.*;
 import org.example.doorhub.category.parent.entity.ParentCategory;
 import org.example.doorhub.discount.entity.Discount;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -26,10 +27,10 @@ public class Category {
     @ToString.Exclude
     private List<Discount> discounts;
 
-    @OneToMany(mappedBy = "parentCategory")
+    @OneToMany(mappedBy = "category")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private List<ParentCategory> parentCategories;
+    private List<ParentCategory> parents = new ArrayList<>();
 
 
 

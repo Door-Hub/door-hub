@@ -16,6 +16,7 @@ import org.example.doorhub.user.entity.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,27 +32,18 @@ public class CategoryService extends GenericCrudService<Category, Integer, Categ
     private final ParentRepository parentRepository;
 
     @Override
+    @Transactional
     protected Category save(CategoryCreateDto categoryCreateDto) {
 
-        ParentCategory parentCategory = parentRepository.findById(categoryCreateDto.getParentCategoryId())
-                .orElseThrow(() -> new EntityNotFoundException("category id not found"));
-
         Category category = mapper.toEntity(categoryCreateDto);
-        category.getParentCategories().add(parentCategory);
         return repository.save(category);
     }
 
 
     @Override
+    @Transactional
     protected Category updateEntity(CategoryUpdateDto categoryUpdateDto, Category category) {
-
-        Optional<User> user = userRepository.findById(categoryUpdateDto.getUserId());
-        Optional<ParentCategory> parentCategory = parentRepository.findById(categoryUpdateDto.getParentCategoryId());
-
-        if (user.isPresent() && parentCategory.isPresent()) {
-            mapper.update(categoryUpdateDto, category);
-            return repository.save(category);
-        }
-        throw new EntityNotFoundException("user or category id not found ");
+        mapper.update(categoryUpdateDto, category);
+        return repository.save(category);
     }
 }
