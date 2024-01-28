@@ -3,6 +3,7 @@ package org.example.doorhub.discount.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.doorhub.category.entity.Category;
+import org.example.doorhub.category.parent.entity.ParentCategory;
 import org.example.doorhub.listeners.DiscountStartDate;
 
 import java.time.LocalDateTime;
@@ -22,8 +23,9 @@ public class Discount {
     private LocalDateTime endDate;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "parent_category_id")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private Category category;
+    private ParentCategory parentCategory;
+    
 }

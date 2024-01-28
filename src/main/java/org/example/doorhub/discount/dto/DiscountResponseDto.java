@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class DiscountResponseDto {
 
     private Integer id;
-    private Integer categoryId;
+    private Integer parentCategoryId;
     private int percentage;
     private LocalDateTime startDate;
     private LocalDateTime endDate;

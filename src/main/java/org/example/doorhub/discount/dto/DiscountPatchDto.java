@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class DiscountPatchDto {
 
     @NotNull
-    private Integer categoryId;
+    private Integer parentCategoryId;
     private int percentage;
     private LocalDateTime startDate;
     private LocalDateTime endDate;

@@ -14,7 +14,7 @@ import java.util.UUID;
 public class DiscountCreateDto {
 
     @NotNull
-    private Integer categoryId;
+    private Integer parentCategoryId;
     private int percentage;
     private LocalDateTime startDate;
     private LocalDateTime endDate;

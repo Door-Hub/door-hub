@@ -4,8 +4,8 @@ package org.example.doorhub.discount;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.example.doorhub.category.CategoryRepository;
-import org.example.doorhub.category.entity.Category;
+import org.example.doorhub.category.parent.ParentRepository;
+import org.example.doorhub.category.parent.entity.ParentCategory;
 import org.example.doorhub.common.service.GenericCrudService;
 import org.example.doorhub.discount.dto.DiscountCreateDto;
 import org.example.doorhub.discount.dto.DiscountPatchDto;
@@ -24,14 +24,14 @@ public class DiscountService extends GenericCrudService<Discount, Integer, Disco
     private final DiscountRepository repository;
     private final DiscountMapperDto mapper;
     private final Class<Discount> EntityClass = Discount.class;
-    private final CategoryRepository categoryRepository;
+    private final ParentRepository parentRepository;
 
     @Override
     protected Discount save(DiscountCreateDto discountCreateDto) {
         Discount discount = mapper.toEntity(discountCreateDto);
-        Category category = categoryRepository.findById(discountCreateDto.getCategoryId())
+        ParentCategory parentCategory = parentRepository.findById(discountCreateDto.getParentCategoryId())
                 .orElseThrow(() -> new EntityNotFoundException("category not found"));
-        discount.setCategory(category);
+        discount.setParentCategory(parentCategory);
         return repository.save(discount);
 
     }
@@ -39,9 +39,9 @@ public class DiscountService extends GenericCrudService<Discount, Integer, Disco
     @Override
     protected Discount updateEntity(DiscountUpdateDto discountUpdateDto, Discount discount) {
 
-        Optional<Category> category = categoryRepository.findById(discountUpdateDto.getCategoryId());
+        Optional<ParentCategory> parent = parentRepository.findById(discountUpdateDto.getParentCategoryId());
 
-        if (category.isPresent()) {
+        if (parent.isPresent()) {
             mapper.update(discountUpdateDto, discount);
             return repository.save(discount);
         }

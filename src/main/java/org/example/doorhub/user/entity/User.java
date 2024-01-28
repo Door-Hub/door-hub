@@ -2,6 +2,7 @@ package org.example.doorhub.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 import org.example.doorhub.address.entity.Address;
 import org.example.doorhub.attachment.entity.Attachment;
 import org.example.doorhub.book.entity.Book;
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @AllArgsConstructor
@@ -36,7 +38,7 @@ public class User implements UserDetails {
     private String gender;
     private String email;
 
-  //  @Column(name = "birth_date")
+    @Column(name = "birth_date")
     private LocalDate birthDate;
     private LocalDateTime created;
     private LocalDateTime updated;
@@ -58,7 +60,6 @@ public class User implements UserDetails {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToOne(mappedBy = "user")
-    @JsonIgnore
     private Attachment attachments;
 
 

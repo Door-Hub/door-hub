@@ -33,8 +33,6 @@ public class Attachment {
     @EqualsAndHashCode.Exclude
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @JsonIgnore
-    @JsonBackReference
     private User user;
 
 }
