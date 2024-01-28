@@ -48,8 +48,6 @@ public class SecurityConfiguration {
                 )
                 .oauth2Login(withDefaults())
                 .formLogin(withDefaults())
-//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .addFilterBefore(jwtSecurityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

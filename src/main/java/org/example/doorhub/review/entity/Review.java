@@ -12,12 +12,11 @@ import org.example.doorhub.user.entity.User;
 @Data
 @Entity
 public class Review {
-
     @Id
     private Integer id;
-    private Integer userId;
     private Integer categoryId;
     private Integer stars;
+    private Integer seenUsers;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

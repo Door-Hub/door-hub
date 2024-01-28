@@ -26,7 +26,7 @@ public class ReviewService {
     private final ModelMapper mapper;
     private final ParentRepository parentRepository;
 
-    public ReviewResponseDto create(Principal userId, ReviewCreateDto createDto) {
+    public ReviewResponseDto create( ReviewCreateDto createDto) {
 
         User user = userRepository.findById(createDto.getUserId()).orElseThrow(EntityNotFoundException::new);
 

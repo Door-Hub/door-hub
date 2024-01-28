@@ -6,13 +6,12 @@ import lombok.NoArgsConstructor;
 import org.example.doorhub.user.entity.User;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class AttachmentResponseDto {
-    private UUID id;
+    private Integer id;
 
     private String file_name;
 

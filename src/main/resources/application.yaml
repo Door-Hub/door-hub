@@ -9,8 +9,8 @@ spring:
             client-id: 116281926130-r9qvadd7506ovr9q32lqq7r2qq27m260.apps.googleusercontent.com
             client-secret: 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
             scope:
-               - email
-               - profile
+              - email
+              - profile
           github:
             client-id: 3a3bd55b1ab6054f3b18
             client-secret: 9c58751edfa9f9b90a757a4ec23962537b26a2d7
@@ -40,7 +40,7 @@ security:
 
 notification-service:
   eskiz:
-    access-token: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDgzNTg0MDUsImlhdCI6MTcwNTc2NjQwNSwicm9sZSI6InRlc3QiLCJzaWduIjoiZjNkMzAwYzNhZjU2M2Q3MWFlNTAyM2M5YTYxMjE1MWRiODg3ODFhOTU4MDVkNTNmYTUzZGY1ZGJlZmZhZTNhOCIsInN1YiI6IjU3NzYifQ.0-NAynOnYWPvTNcNKaY70bFqI8VHOH_lAhGfl-VOL-g
+    access-token: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDkwMTUzOTYsImlhdCI6MTcwNjQyMzM5Niwicm9sZSI6InRlc3QiLCJzaWduIjoiZDIyOTBhNzJkZWY5MWRhODg1MTc0OGY0OTU1N2E2YWJkMWQ3NjI5YmE3MGNjY2MwODAwYWQyYmNhZjBiYTc4YSIsInN1YiI6IjU3NzgifQ.Ld8Gh7n8UYT8HOWpWd0G0w44XWH5P7bB_fcwQDOhVOM
 
 location:
   api:

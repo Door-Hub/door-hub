@@ -113,9 +113,8 @@ public class AttachmentService {
         }
     }
 
-
-    public void deleteAttachment(Integer userId) {
-        Attachment attachment = repository.findByUserId(userId).orElseThrow(() -> new AttachmentNotFound("Could not find attachment"));
+    public void deleteAttachment(Integer attachmentId) {
+        Attachment attachment = repository.findByUserId(attachmentId).orElseThrow(() -> new AttachmentNotFound("Could not find attachment"));
         repository.deleteById(attachment.getId());
         deleteFile(attachment.getUrl());
 
