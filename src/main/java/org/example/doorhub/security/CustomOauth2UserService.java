@@ -24,16 +24,18 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
         String email = (String) attributes.get("email");
-        String name = (String) attributes.get("name");
         String picture = (String) attributes.get("picture");
         String avatarUrl = (String) attributes.get("avatar_url");
+        String givenName = (String) attributes.get("given_name");
+        String family_name = (String) attributes.get("family_name");
 
         System.out.println("attributes = " + attributes);
         Optional<User> user = userRepository.findUserByEmail(email);
         if (user.isEmpty()){
             User newUser = new User();
             newUser.setEmail(email);
-            newUser.setFirstname(name);
+            newUser.setFirstname(givenName);
+            newUser.setLastname(family_name);
             newUser.setAvatar(picture);
             userRepository.save(newUser);
         }

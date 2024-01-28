@@ -4,10 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.doorhub.location.dto.LocationResponse;
 import org.example.doorhub.user.entity.User;
 
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor

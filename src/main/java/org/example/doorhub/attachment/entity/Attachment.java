@@ -5,7 +5,6 @@ import lombok.*;
 import org.example.doorhub.user.entity.User;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,8 +13,8 @@ import java.util.UUID;
 @Table(name = "attachment")
 public class Attachment {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @Column(nullable = false)
     private String file_name;
