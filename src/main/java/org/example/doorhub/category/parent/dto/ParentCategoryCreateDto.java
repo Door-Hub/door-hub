@@ -11,6 +11,7 @@ public class ParentCategoryCreateDto {
 
     private String name;
     private Integer userId;
+    private Integer viewId;
     private Integer categoryId;
 
 }

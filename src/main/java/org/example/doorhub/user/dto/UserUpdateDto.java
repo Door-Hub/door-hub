@@ -26,7 +26,7 @@ public class UserUpdateDto {
     private String email;
     @NotBlank
     private String gender;
-    private LocalDate brithDate;
+    private LocalDate birthDate;
     private String avatar;
 
 }

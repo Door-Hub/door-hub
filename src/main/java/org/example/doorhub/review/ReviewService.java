@@ -39,19 +39,19 @@ public class ReviewService extends GenericCrudService<Review, Integer, ReviewCre
 
         User user = userRepository.findById(createDto.getUserId()).orElseThrow(EntityNotFoundException::new);
 
-        ParentCategory parentCategory = parentRepository.findById(createDto.getCategoryId()).orElseThrow(
+        ParentCategory parentCategory = parentRepository.findById(createDto.getParentCategoryId()).orElseThrow(
                 () -> new CustomCategoryNotFoundException("Category not found")
         );
 
         createDto.setUserId(user.getId());
-        createDto.setCategoryId(parentCategory.getId());
+        createDto.setParentCategoryId(parentCategory.getId());
         createDto.setStars(createDto.getStars() + 1);
 
         Review review = modelMapper.map(createDto, Review.class);
 
         repository.save(review);
 
-        parentCategory.setStars(createDto.getStars());
+        parentCategory.getViews().add(review);
 
         parentRepository.save(parentCategory);
 
@@ -78,8 +78,7 @@ public class ReviewService extends GenericCrudService<Review, Integer, ReviewCre
 
         ParentCategory category = parentRepository.findById(id)
                 .orElseThrow(() -> new CustomCategoryNotFoundException("Category not found"));
-
-        Integer stars = category.getStars();
+        List<Review> views = category.getViews();
 
         List<ReviewResponseDto> reviewList = new ArrayList<>();
         ReviewResponseDto reviewResponseDto = new ReviewResponseDto();

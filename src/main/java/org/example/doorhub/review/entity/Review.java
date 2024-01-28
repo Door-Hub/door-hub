@@ -14,7 +14,6 @@ import org.example.doorhub.user.entity.User;
 public class Review {
     @Id
     private Integer id;
-    private Integer categoryId;
     private Integer stars;
     private Integer seenUsers;
 

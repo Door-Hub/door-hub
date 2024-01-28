@@ -14,5 +14,5 @@ public class ReviewCreateDto {
     @NotNull
     private Integer userId;
     @NotNull
-    private Integer categoryId;
+    private Integer parentCategoryId;
 }

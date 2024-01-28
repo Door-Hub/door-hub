@@ -6,6 +6,7 @@ import org.example.doorhub.category.entity.Category;
 import org.example.doorhub.review.entity.Review;
 import org.example.doorhub.user.entity.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -20,7 +21,6 @@ public class ParentCategory {
     private Integer id;
     private String name;
     private String avatar;
-    private Integer stars;
 
 
     @ManyToOne
@@ -38,5 +38,5 @@ public class ParentCategory {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "parentCategory")
-    private List<Review> views;
+    private List<Review> views = new ArrayList<>();
 }

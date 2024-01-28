@@ -1,7 +1,9 @@
 package org.example.doorhub.attachment.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 import org.example.doorhub.user.entity.User;
 
 import java.time.LocalDateTime;
@@ -31,6 +33,8 @@ public class Attachment {
     @EqualsAndHashCode.Exclude
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JsonIgnore
+    @JsonBackReference
     private User user;
 
 }

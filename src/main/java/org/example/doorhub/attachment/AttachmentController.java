@@ -3,6 +3,7 @@ package org.example.doorhub.attachment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.doorhub.attachment.dto.AttachmentResponseDto;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class AttachmentController {
         return switch (Objects.requireNonNull(file.getContentType())) {
             case MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE -> {
                 AttachmentResponseDto attachmentResponseDto = service.processImageUpload(file, userId);
-                yield ResponseEntity.ok(attachmentResponseDto);
+                yield ResponseEntity.status(HttpStatus.CREATED).body(attachmentResponseDto);
             }
             default -> {
                 log.error("Unsupported filetype: {}", file.getContentType());

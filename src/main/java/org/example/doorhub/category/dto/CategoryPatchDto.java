@@ -11,4 +11,5 @@ public class CategoryPatchDto {
 
     private String name;
     private String avatar;
+
 }
