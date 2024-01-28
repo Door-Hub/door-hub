@@ -3,7 +3,6 @@ package org.example.doorhub.user.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
-import net.minidev.json.annotate.JsonIgnore;
 import org.example.doorhub.address.entity.Address;
 import org.example.doorhub.attachment.entity.Attachment;
 import org.example.doorhub.book.entity.Book;
@@ -39,7 +38,7 @@ public class User implements UserDetails {
     private String gender;
     private String email;
 
-    @Column(name = "birth_date")
+  //  @Column(name = "birth_date")
     private LocalDate birthDate;
     private LocalDateTime created;
     private LocalDateTime updated;
