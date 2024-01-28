@@ -1,6 +1,5 @@
 package org.example.doorhub.user.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.doorhub.address.entity.Address;
@@ -38,20 +37,25 @@ public class User implements UserDetails {
     private String gender;
     private String email;
 
-  //  @Column(name = "birth_date")
+    @Column(name = "birth_date")
     private LocalDate birthDate;
     private LocalDateTime created;
     private LocalDateTime updated;
 
     @OneToMany
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @JoinTable(name = "user_addresses",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "address_id"))
     private List<Address> addresses;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany()
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
+    @JoinTable(name = "user_categories",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "categoriy_id"))
     private List<ParentCategory> categories;
 
     @Enumerated(EnumType.STRING)
@@ -73,7 +77,10 @@ public class User implements UserDetails {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "user")
+    @OneToMany()
+    @JoinTable(name = "user_reviews",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "review_id"))
     private List<Review> reviews;
 
     @Override

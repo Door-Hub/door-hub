@@ -1,5 +1,6 @@
 package org.example.doorhub.address;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.doorhub.address.dto.AddressBaseDto;
@@ -8,6 +9,8 @@ import org.example.doorhub.address.dto.AddressUpdateDto;
 import org.example.doorhub.address.entity.Address;
 import org.example.doorhub.common.service.GenericCrudService;
 import org.example.doorhub.location.LocationService;
+import org.example.doorhub.user.UserRepository;
+import org.example.doorhub.user.entity.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -21,12 +24,17 @@ public class AddressService extends GenericCrudService<Address, Integer, Address
     private final Class<Address> entityClass = Address.class;
     private final LocationService locationService;
     private final ModelMapper modelMapper;
+    private final UserRepository userRepository;
 
 
     @Override
     protected Address save(AddressBaseDto addressCreateDto) {
 
+        User user = userRepository.findById(addressCreateDto.getUserId()).orElseThrow(() -> new EntityNotFoundException("user not found"));
+
         Address address = mapper.toEntity(addressCreateDto);
+        address.setUser(user);
+        user.getAddresses().add(address);
         return repository.save(address);
     }
 

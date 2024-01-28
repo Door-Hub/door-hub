@@ -39,14 +39,14 @@ public class ParentService extends GenericCrudService<ParentCategory, Integer, P
         Category category = categoryRepository.findById(parentCategoryCreateDto.getCategoryId())
                 .orElseThrow(() -> new EntityNotFoundException("category id not found"));
 
-        Review review = reviewRepository.findById(parentCategoryCreateDto.getViewId())
-                .orElseThrow(() -> new EntityNotFoundException("view id not found"));
-
 
         ParentCategory parentCategory = mapper.toEntity(parentCategoryCreateDto);
+
         parentCategory.setUser(user);
+        user.getCategories().add(parentCategory);
+
         parentCategory.setCategory(category);
-        parentCategory.getViews().add(review);
+        category.getParents().add(parentCategory);
         return repository.save(parentCategory);
     }
 

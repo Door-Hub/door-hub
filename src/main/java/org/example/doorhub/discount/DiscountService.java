@@ -30,10 +30,15 @@ public class DiscountService extends GenericCrudService<Discount, Integer, Disco
 
     @Override
     protected Discount save(DiscountCreateDto discountCreateDto) {
+
         Discount discount = mapper.toEntity(discountCreateDto);
+
         ParentCategory category = parentRepository.findById(discountCreateDto.getParentCategoryId())
                 .orElseThrow(() -> new EntityNotFoundException("category not found"));
+
         discount.setParentCategory(category);
+        category.getDiscounts().add(discount);
+
         return repository.save(discount);
 
     }

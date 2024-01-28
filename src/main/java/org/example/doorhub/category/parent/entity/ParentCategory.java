@@ -1,5 +1,6 @@
 package org.example.doorhub.category.parent.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.doorhub.category.entity.Category;
@@ -7,7 +8,6 @@ import org.example.doorhub.discount.entity.Discount;
 import org.example.doorhub.review.entity.Review;
 import org.example.doorhub.user.entity.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -25,6 +25,7 @@ public class ParentCategory {
 
 
     @ManyToOne
+    @JsonProperty("categoryId")
     @JoinColumn(name = "category_id")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
@@ -39,6 +40,20 @@ public class ParentCategory {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "parentCategory")
-    private List<Review> views = new ArrayList<>();
+    @OneToMany()
+    @JoinTable(name = "parent_views",
+            joinColumns = @JoinColumn(name = "parent_id"),
+            inverseJoinColumns = @JoinColumn(name = "view_id")
+    )
+    private List<Review> views;
+
+
+    @OneToMany()
+    @JoinTable(name = "parent_discounts",
+            joinColumns = @JoinColumn(name = "parent_id"),
+            inverseJoinColumns = @JoinColumn(name = "discount_id")
+    )
+    private List<Discount> discounts;
+
+
 }

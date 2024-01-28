@@ -22,18 +22,15 @@ public class Category {
     private String avatar;
 
 
+
     @OneToMany()
-    @JoinTable(name = "category_discounts",
+    @JoinTable(name = "category_parents",
             joinColumns = @JoinColumn(name = "category_id"),
-            inverseJoinColumns = @JoinColumn(name = "discount_id")
+            inverseJoinColumns = @JoinColumn(name = "parent_id")
     )
-    private List<Discount> discounts;
-
-
-    @OneToMany(mappedBy = "category")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private List<ParentCategory> parents = new ArrayList<>();
+    private List<ParentCategory> parents;
 
 
 }

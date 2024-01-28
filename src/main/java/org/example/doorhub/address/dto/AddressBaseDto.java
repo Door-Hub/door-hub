@@ -13,5 +13,6 @@ public class AddressBaseDto {
     @NotBlank
     private String name;
     private String home;
+    private Integer userId;
 
 }
