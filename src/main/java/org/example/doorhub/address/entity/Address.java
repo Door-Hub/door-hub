@@ -20,8 +20,6 @@ public class Address {
     private String name;
     @Column(name = "location_name")
     private String locationName;
-    private Double longitude;
-    private Double latitude;
     private String home;
 
     @ManyToOne

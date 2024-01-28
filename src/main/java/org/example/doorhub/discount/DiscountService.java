@@ -43,16 +43,35 @@ public class DiscountService extends GenericCrudService<Discount, Integer, Disco
 
     }
 
+    public DiscountResponseDto create(DiscountCreateDto createDto) {
+        ParentCategory category = parentRepository.findById(createDto.getParentCategoryId())
+                .orElseThrow(() -> new EntityNotFoundException("category not found"));
+
+        Discount discount = save(createDto);
+        DiscountResponseDto responseDto = mapper.toResponseDto(discount);
+        responseDto.setParentCategoryId(category.getId());
+        return responseDto;
+
+    }
+
     @Override
     protected Discount updateEntity(DiscountUpdateDto discountUpdateDto, Discount discount) {
 
-        Optional<ParentCategory> category = parentRepository.findById(discountUpdateDto.getParentCategoryId());
+        mapper.update(discountUpdateDto, discount);
+        return repository.save(discount);
+    }
 
-        if (category.isPresent()) {
-            mapper.update(discountUpdateDto, discount);
-            return repository.save(discount);
-        }
+    public DiscountResponseDto update(Integer id, DiscountUpdateDto updateDto) {
 
-        throw new EntityNotFoundException("category id not found");
+        Discount discount = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("discount id not found"));
+
+        ParentCategory parentCategory = parentRepository.findById(updateDto.getParentCategoryId())
+                .orElseThrow(() -> new EntityNotFoundException("parentCategory id not found"));
+
+        Discount updateEntity = updateEntity(updateDto, discount);
+        DiscountResponseDto responseDto = mapper.toResponseDto(updateEntity);
+        responseDto.setParentCategoryId(parentCategory.getId());
+        return responseDto;
     }
 }

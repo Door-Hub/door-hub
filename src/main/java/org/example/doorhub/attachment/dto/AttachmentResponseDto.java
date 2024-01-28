@@ -21,5 +21,5 @@ public class AttachmentResponseDto {
 
     private LocalDateTime uploadTime;
 
-    private User user;
+    private  Integer userId;
 }

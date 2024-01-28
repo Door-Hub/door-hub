@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 public class BookController {
 
     private final BookService service;
-    //............................................................
 
     @PostMapping
     public ResponseEntity<BookResponseDto> createBook(@RequestBody @Valid BookCreateDto bookCreateDto) {

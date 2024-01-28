@@ -9,8 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class ReviewCreateDto {
+
     @NotNull
     private Integer stars;
+    private Integer seenUsers;
     @NotNull
     private Integer userId;
     @NotNull

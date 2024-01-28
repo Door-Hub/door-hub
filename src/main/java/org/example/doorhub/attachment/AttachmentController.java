@@ -22,7 +22,7 @@ public class AttachmentController {
 
 
     @PostMapping(value = "/opload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AttachmentResponseDto> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("userId") Integer userId) throws IOException {
+    public ResponseEntity<AttachmentResponseDto> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("userId") Integer userId)  {
         return switch (Objects.requireNonNull(file.getContentType())) {
             case MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE -> {
                 AttachmentResponseDto attachmentResponseDto = service.processImageUpload(file, userId);
@@ -38,7 +38,7 @@ public class AttachmentController {
     }
 
     @PutMapping(value = "/opload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AttachmentResponseDto> updateFile(@RequestParam("file") MultipartFile file, @RequestParam("userId") Integer userId) throws IOException {
+    public ResponseEntity<AttachmentResponseDto> updateFile(@RequestParam("file") MultipartFile file, @RequestParam("userId") Integer userId) {
         return switch (Objects.requireNonNull(file.getContentType())) {
             case MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE -> {
                 AttachmentResponseDto attachmentResponseDto = service.processImageUpdate(file, userId);
@@ -54,7 +54,7 @@ public class AttachmentController {
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<?> delete(@RequestParam Integer userId) {
+    public ResponseEntity<?> delete(@PathVariable Integer userId) {
         service.deleteAttachment(userId);
         return ResponseEntity.noContent().build();
     }

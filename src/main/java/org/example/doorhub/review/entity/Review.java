@@ -3,7 +3,6 @@ package org.example.doorhub.review.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.example.doorhub.category.entity.Category;
 import org.example.doorhub.category.parent.entity.ParentCategory;
 import org.example.doorhub.user.entity.User;
 
@@ -14,6 +13,7 @@ import org.example.doorhub.user.entity.User;
 public class Review {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private Integer stars;
     private Integer seenUsers;

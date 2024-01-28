@@ -22,12 +22,13 @@ public class AddressController {
 
 
     @PostMapping
-    public ResponseEntity<AddressResponseDto> createAddress(@RequestBody @Valid AddressBaseDto createDTo,
-                                                            @RequestParam(name = "lat", required = false) Double latitude,
-                                                            @RequestParam(name = "lon", required = false) Double longitude) {
+    public ResponseEntity<AddressResponseDto> createAddress(
+            @RequestBody @Valid AddressBaseDto createDTo,
+            @RequestParam(name = "lat", required = false) Double latitude,
+            @RequestParam(name = "lon", required = false) Double longitude) {
         if (latitude != null || longitude != null) {
             String locationName = locationService.getLocationName(latitude, longitude);
-            AddressResponseDto addressResponseDto = addressService.create(createDTo, locationName);
+            AddressResponseDto addressResponseDto = addressService.createAddressLocation(createDTo, locationName);
             return ResponseEntity.status(HttpStatus.CREATED).body(addressResponseDto);
         } else {
             AddressResponseDto addressResponseDto = addressService.create(createDTo);
@@ -51,7 +52,7 @@ public class AddressController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<AddressResponseDto> updateAddress(@PathVariable Integer id, @RequestBody @Valid AddressUpdateDto updateDto) {
+    public ResponseEntity<AddressResponseDto> updateAddress(@PathVariable Integer id, @RequestBody  AddressUpdateDto updateDto) {
         AddressResponseDto responseDto = addressService.update(id, updateDto);
         return ResponseEntity.ok(responseDto);
     }

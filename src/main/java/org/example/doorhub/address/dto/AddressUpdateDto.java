@@ -5,12 +5,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class AddressUpdateDto extends AddressBaseDto {
-
+public class AddressUpdateDto {
 
     private String name;
     private String home;

@@ -26,6 +26,7 @@ public class BookService extends GenericCrudService<Book, Integer, BookCreateDto
 
     @Override
     protected Book save(BookCreateDto bookCreateDto) {
+
         User booker = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User worker = userRepository.findById(bookCreateDto.getWorker())
                 .orElseThrow(() -> new EntityNotFoundException("user not found"));
@@ -33,6 +34,7 @@ public class BookService extends GenericCrudService<Book, Integer, BookCreateDto
         booking.setWorker(worker);
         booking.setBooker(booker);
         return repository.save(booking);
+
     }
 
     @Override

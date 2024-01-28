@@ -6,6 +6,7 @@ import jakarta.persistence.OneToOne;
 import lombok.*;
 import org.example.doorhub.user.entity.User;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -17,7 +18,7 @@ public class Book {
     @Id
     private Integer id;
     private Double hourlyRate;
-    private LocalDateTime startDate;
+    private LocalDate startDate;
     private LocalDateTime endDate;
     private boolean Accepted;
 

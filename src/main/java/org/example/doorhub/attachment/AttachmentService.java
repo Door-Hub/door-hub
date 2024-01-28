@@ -34,75 +34,62 @@ public class AttachmentService {
     private String uploadDir;
 
     @Transactional
-    public AttachmentResponseDto processImageUpload(MultipartFile file, Integer userId) throws IOException {
-        if (file.isEmpty()) {
-            log.error("Empty file uploaded");
-            throw new IllegalArgumentException("Empty file uploaded");
-        }
+    public AttachmentResponseDto processImageUpload(MultipartFile file, Integer userId) {
+
+        extracted(file);
         try {
-            File destFile = Paths.get(uploadDir, file.getOriginalFilename()).toFile();
-            file.transferTo(destFile);
-            log.info("Uploaded: {}", destFile);
-
-            User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new EntityNotFoundException("User not found"));
-
-            Attachment attachment = new Attachment();
-            attachment.setFile_name(file.getOriginalFilename());
-            attachment.setFileType(Objects.requireNonNull(file.getContentType()));
-            attachment.setUrl(String.valueOf(Paths.get(uploadDir, file.getOriginalFilename())));
-            attachment.setUploadTime(LocalDateTime.now());
-            attachment.setUser(user);
-
-            Attachment saved = repository.save(attachment);
-
-            user.setAttachments(saved);
-
-            userRepository.save(user);
-
-            return mapper.map(saved, AttachmentResponseDto.class);
+            return getAttachmentResponseDto(file, userId);
         } catch (IOException e) {
             log.error("Error uploading file: {}", e.getMessage());
             throw new RuntimeException("Error uploading file", e);
         }
     }
 
-
     @Transactional
     public AttachmentResponseDto processImageUpdate(MultipartFile file, Integer userId) {
 
-        if (file.isEmpty()) {
-            log.error("Empty file uploaded");
-            throw new IllegalArgumentException("Empty file uploaded");
-        }
+        extracted(file);
 
         try {
-            File destFile = Paths.get(uploadDir, file.getOriginalFilename()).toFile();
-            file.transferTo(destFile);
-            log.info("Uploaded: {}", destFile);
-
-            User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new EntityNotFoundException("User not found"));
-
-            Attachment attachment = user.getAttachments();
-            String url = attachment.getUrl();
-            deleteFile(url);
-
-            attachment.setId(user.getAttachments().getId());
-            attachment.setFile_name(file.getOriginalFilename());
-            attachment.setFileType(Objects.requireNonNull(file.getContentType()));
-            attachment.setUrl(String.valueOf(Paths.get(uploadDir, file.getOriginalFilename())));
-            attachment.setUploadTime(LocalDateTime.now());
-            attachment.setUser(user);
-
-            Attachment saved = repository.save(attachment);
-
-            return mapper.map(saved, AttachmentResponseDto.class);
+            return getAttachmentResponseDto(file, userId);
 
         } catch (IOException e) {
             log.error("Error uploading file: {}", e.getMessage());
             throw new RuntimeException("Error uploading file", e);
         }
+    }
+
+    private static void extracted(MultipartFile file) {
+        if (file.isEmpty()) {
+            log.error("Empty file uploaded");
+            throw new IllegalArgumentException("Empty file uploaded");
+        }
+    }
+
+    private AttachmentResponseDto getAttachmentResponseDto(MultipartFile file, Integer userId) throws IOException {
+        File destFile = Paths.get(uploadDir, file.getOriginalFilename()).toFile();
+        file.transferTo(destFile);
+        log.info("Uploaded: {}", destFile);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        Attachment attachment = user.getAttachments();
+        String url = attachment.getUrl();
+        deleteFile(url);
+
+        attachment.setId(user.getAttachments().getId());
+        attachment.setFile_name(file.getOriginalFilename());
+        attachment.setFileType(Objects.requireNonNull(file.getContentType()));
+        attachment.setUrl(String.valueOf(Paths.get(uploadDir, file.getOriginalFilename())));
+        attachment.setUploadTime(LocalDateTime.now());
+        attachment.setUser(user);
+
+        Attachment saved = repository.save(attachment);
+
+        AttachmentResponseDto responseDto = mapper.map(saved, AttachmentResponseDto.class);
+        responseDto.setUserId(user.getId());
+        return responseDto;
     }
 
     @Transactional

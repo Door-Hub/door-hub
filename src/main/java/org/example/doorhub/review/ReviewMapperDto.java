@@ -4,14 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.example.doorhub.common.service.GenericDtoMapper;
 import org.example.doorhub.review.dto.ReviewCreateDto;
 import org.example.doorhub.review.dto.ReviewResponseDto;
-import org.example.doorhub.review.dto.ReviewUpdateDto;
 import org.example.doorhub.review.entity.Review;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor
-public class ReviewMapperDto extends GenericDtoMapper<Review, ReviewCreateDto, ReviewUpdateDto, ReviewResponseDto> {
+public class ReviewMapperDto extends GenericDtoMapper<Review, ReviewCreateDto, ReviewCreateDto, ReviewResponseDto> {
 
     private final ModelMapper modelMapper;
 
@@ -26,7 +25,7 @@ public class ReviewMapperDto extends GenericDtoMapper<Review, ReviewCreateDto, R
     }
 
     @Override
-    public void update(ReviewUpdateDto reviewUpdateDto, Review review) {
+    public void update(ReviewCreateDto reviewUpdateDto, Review review) {
         modelMapper.map(reviewUpdateDto, review);
     }
 

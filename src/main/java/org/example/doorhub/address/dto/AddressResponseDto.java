@@ -6,16 +6,16 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddressResponseDto extends AddressBaseDto {
+public class AddressResponseDto  {
 
     @NotNull
     private Integer id;
-    private String locationName;
     private String name;
     private String home;
+    private String locationName;
+    private Integer userId;
 
 }
