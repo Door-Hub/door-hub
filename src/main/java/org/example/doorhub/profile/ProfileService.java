@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Getter
-public class ProfileService extends GenericCrudService<Profile, Integer, ProfileCreateDto, ProfilePatchDto,ProfileUpdateDto,  ProfileResponseDto> {
+public class ProfileService extends GenericCrudService<Profile, Integer, ProfileCreateDto, ProfilePatchDto, ProfileUpdateDto,  ProfileResponseDto> {
 
     private final ProfileRepository repository;
     private final ProfileDtoMapper mapper;

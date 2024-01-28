@@ -28,5 +28,4 @@ public class Profile {
     private String gender;
     private LocalDate brithDate;
 
-
 }

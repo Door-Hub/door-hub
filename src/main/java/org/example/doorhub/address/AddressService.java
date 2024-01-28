@@ -37,7 +37,6 @@ public class AddressService extends GenericCrudService<Address, Integer, Address
         return repository.save(address);
     }
 
-
     public AddressResponseDto create(AddressBaseDto createDTo, String locationName) {
         Address address = mapper.toEntity(createDTo);
         address.setLocationName(locationName);
@@ -46,7 +45,6 @@ public class AddressService extends GenericCrudService<Address, Integer, Address
 
         return mapper.toResponseDto(save);
     }
-
 
     public AddressResponseDto updateLocation(Integer id, String location) {
         Address address = repository.findById(id).orElseThrow();
@@ -59,5 +57,4 @@ public class AddressService extends GenericCrudService<Address, Integer, Address
 
 
     }
-
 }

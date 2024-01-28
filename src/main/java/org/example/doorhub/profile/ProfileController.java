@@ -5,8 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.doorhub.profile.dto.ProfilePatchDto;
 import org.example.doorhub.profile.dto.ProfileResponseDto;
 import org.example.doorhub.profile.dto.ProfileUpdateDto;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,13 +17,6 @@ public class ProfileController {
 
 
     private final ProfileService service;
-
-    @GetMapping
-    public ResponseEntity<Page<ProfileResponseDto>> getAllProfile(Pageable pageable, @RequestParam(required = false) String predicate) {
-        Page<ProfileResponseDto> all = service.getAll(pageable, predicate);
-        return ResponseEntity.ok(all);
-    }
-
 
 
     @GetMapping("/{id}")
