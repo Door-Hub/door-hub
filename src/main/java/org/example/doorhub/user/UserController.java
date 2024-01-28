@@ -24,12 +24,6 @@ public class UserController {
         return ResponseEntity.ok(all);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<?> addUserAddress(@RequestParam Integer userid, @RequestParam Integer addressId) {
-        UserResponseDto responseDto = userService.addUserAddress(userid, addressId);
-        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> getUser(@PathVariable Integer id) {
         UserResponseDto responseDto = userService.getById(id);
