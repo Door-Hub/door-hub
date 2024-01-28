@@ -19,8 +19,8 @@ spring:
             client-secret: bbf4ca1ea0ead55c52ef25d43f618527
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    password: 123
+    url: jdbc:postgresql://localhost:1234/postgres
+    password: postgres
     username: postgres
 
   jpa:
