@@ -33,9 +33,10 @@ public class User implements UserDetails {
     private String username;
     @Column(name = "phone_number")
     private String phoneNumber;
+    private String gender;
     private String email;
 
-    @Column(name = "birth_date")
+  //  @Column(name = "birth_date")
     private LocalDate birthDate;
     private LocalDateTime created;
     private LocalDateTime updated;
