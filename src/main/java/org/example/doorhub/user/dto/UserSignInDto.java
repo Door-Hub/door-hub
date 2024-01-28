@@ -13,6 +13,9 @@ public class UserSignInDto {
     @NotBlank
     @Pattern(regexp = "^9989[0-9]{8}$", message = "Invalid phone number format")
     private String phoneNumber;
+    @NotBlank
+    @Pattern(regexp = "^[\\w\\-\\.]+@([\\w-]+\\.)+[\\w-]{2,}$", message = "Invalid email format")
+    private String email;
 
 
 }

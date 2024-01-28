@@ -29,5 +29,5 @@ public class UserPatchDto {
     @NotBlank
     private String gender;
 
-    private LocalDate brithDate;
+    private LocalDate birthDate;
 }
