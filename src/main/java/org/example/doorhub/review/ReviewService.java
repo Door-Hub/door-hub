@@ -84,8 +84,6 @@ public class ReviewService extends GenericCrudService<Review, Integer, ReviewCre
         ReviewResponseDto reviewResponseDto = new ReviewResponseDto();
 
 
-        reviewResponseDto.setStars(stars);
-
         return reviewList;
     }
 }
