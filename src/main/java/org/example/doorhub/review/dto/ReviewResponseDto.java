@@ -11,6 +11,6 @@ public class ReviewResponseDto {
 
     private Integer stars;
     private Integer userId;
-    private Integer categoryId;
+    private Integer parentCategoryId;
 
 }

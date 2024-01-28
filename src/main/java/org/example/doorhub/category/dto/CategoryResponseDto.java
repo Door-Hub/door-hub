@@ -14,4 +14,5 @@ public class CategoryResponseDto {
     private Integer id;
     private String name;
     private String avatar;
+
 }

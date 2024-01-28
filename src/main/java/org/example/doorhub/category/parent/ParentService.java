@@ -11,6 +11,8 @@ import org.example.doorhub.category.parent.dto.ParentCategoryResponseDto;
 import org.example.doorhub.category.parent.dto.ParentCategoryUpdateDto;
 import org.example.doorhub.category.parent.entity.ParentCategory;
 import org.example.doorhub.common.service.GenericCrudService;
+import org.example.doorhub.review.ReviewRepository;
+import org.example.doorhub.review.entity.Review;
 import org.example.doorhub.user.UserRepository;
 import org.example.doorhub.user.entity.User;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ public class ParentService extends GenericCrudService<ParentCategory, Integer, P
     private final Class<ParentCategory> EntityClass = ParentCategory.class;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final ReviewRepository reviewRepository;
 
     @Override
     protected ParentCategory save(ParentCategoryCreateDto parentCategoryCreateDto) {
@@ -34,12 +37,16 @@ public class ParentService extends GenericCrudService<ParentCategory, Integer, P
                 .orElseThrow(() -> new EntityNotFoundException("user id not found"));
 
         Category category = categoryRepository.findById(parentCategoryCreateDto.getCategoryId())
-                .orElseThrow(() -> new EntityNotFoundException("user id not found"));
+                .orElseThrow(() -> new EntityNotFoundException("category id not found"));
+
+        Review review = reviewRepository.findById(parentCategoryCreateDto.getViewId())
+                .orElseThrow(() -> new EntityNotFoundException("view id not found"));
 
 
         ParentCategory parentCategory = mapper.toEntity(parentCategoryCreateDto);
         parentCategory.setUser(user);
         parentCategory.setCategory(category);
+        parentCategory.getViews().add(review);
         return repository.save(parentCategory);
     }
 

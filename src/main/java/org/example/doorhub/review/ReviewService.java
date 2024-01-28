@@ -13,7 +13,6 @@ import org.example.doorhub.user.entity.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,23 +25,23 @@ public class ReviewService {
     private final ModelMapper mapper;
     private final ParentRepository parentRepository;
 
-    public ReviewResponseDto create( ReviewCreateDto createDto) {
+    public ReviewResponseDto create(ReviewCreateDto createDto) {
 
         User user = userRepository.findById(createDto.getUserId()).orElseThrow(EntityNotFoundException::new);
 
-        ParentCategory parentCategory = parentRepository.findById(createDto.getCategoryId()).orElseThrow(
+        ParentCategory parentCategory = parentRepository.findById(createDto.getParentCategoryId()).orElseThrow(
                 () -> new CustomCategoryNotFoundException("Category not found")
         );
 
         createDto.setUserId(user.getId());
-        createDto.setCategoryId(parentCategory.getId());
+        createDto.setParentCategoryId(parentCategory.getId());
         createDto.setStars(createDto.getStars() + 1);
 
         Review review = mapper.map(createDto, Review.class);
 
         reviewRepository.save(review);
 
-        parentCategory.setStars(createDto.getStars());
+        parentCategory.getViews().add(review);
 
         parentRepository.save(parentCategory);
 
@@ -54,14 +53,10 @@ public class ReviewService {
 
         ParentCategory category = parentRepository.findById(id)
                 .orElseThrow(() -> new CustomCategoryNotFoundException("Category not found"));
-
-        Integer stars = category.getStars();
+        List<Review> views = category.getViews();
 
         List<ReviewResponseDto> reviewList = new ArrayList<>();
         ReviewResponseDto reviewResponseDto = new ReviewResponseDto();
-
-
-        reviewResponseDto.setStars(stars);
 
         return reviewList;
     }

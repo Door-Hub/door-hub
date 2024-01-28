@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class ParentCategoryUpdateDto {
     private String name;
     private Integer userId;
-    private Integer stars;
+    private Integer viewId;
     private Integer categoryId;
 
 }

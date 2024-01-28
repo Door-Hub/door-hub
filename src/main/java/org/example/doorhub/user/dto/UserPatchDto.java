@@ -1,5 +1,6 @@
 package org.example.doorhub.user.dto;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,5 +30,5 @@ public class UserPatchDto {
     @NotBlank
     private String gender;
 
-    private LocalDate brithDate;
+    private LocalDate birthDate;
 }
