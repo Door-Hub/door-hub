@@ -2,6 +2,7 @@ package org.example.doorhub.attachment;
 
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.doorhub.attachment.dto.AttachmentResponseDto;
@@ -32,13 +33,12 @@ public class AttachmentService {
     @Value("${service.upload.dir}")
     private String uploadDir;
 
+    @Transactional
     public AttachmentResponseDto processImageUpload(MultipartFile file, Integer userId) throws IOException {
         if (file.isEmpty()) {
             log.error("Empty file uploaded");
             throw new IllegalArgumentException("Empty file uploaded");
         }
-
-
         try {
             File destFile = Paths.get(uploadDir, file.getOriginalFilename()).toFile();
             file.transferTo(destFile);
@@ -68,6 +68,7 @@ public class AttachmentService {
     }
 
 
+    @Transactional
     public AttachmentResponseDto processImageUpdate(MultipartFile file, Integer userId) {
 
         if (file.isEmpty()) {
@@ -81,7 +82,7 @@ public class AttachmentService {
             log.info("Uploaded: {}", destFile);
 
             User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new RuntimeException("User not found"));
+                    .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
             Attachment attachment = user.getAttachments();
             String url = attachment.getUrl();
@@ -104,7 +105,8 @@ public class AttachmentService {
         }
     }
 
-    private void deleteFile(String filePath) {
+    @Transactional
+    protected void deleteFile(String filePath) {
         try {
             Files.deleteIfExists(Paths.get(filePath));
         } catch (IOException e) {
@@ -113,8 +115,10 @@ public class AttachmentService {
         }
     }
 
+    @Transactional
     public void deleteAttachment(Integer attachmentId) {
-        Attachment attachment = repository.findByUserId(attachmentId).orElseThrow(() -> new AttachmentNotFound("Could not find attachment"));
+        Attachment attachment = repository.findByUserId(attachmentId).
+                orElseThrow(() -> new AttachmentNotFound("Could not find attachment"));
         repository.deleteById(attachment.getId());
         deleteFile(attachment.getUrl());
 

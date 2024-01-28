@@ -5,17 +5,16 @@ import lombok.*;
 import org.example.doorhub.address.entity.Address;
 import org.example.doorhub.attachment.entity.Attachment;
 import org.example.doorhub.book.entity.Book;
-import org.example.doorhub.category.entity.Category;
 import org.example.doorhub.category.parent.entity.ParentCategory;
 import org.example.doorhub.listeners.UserCreatedUpdated;
 import org.example.doorhub.review.entity.Review;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -35,7 +34,8 @@ public class User implements UserDetails {
     @Column(name = "phone_number")
     private String phoneNumber;
     private String email;
-    private String gender;
+
+    @Column(name = "birth_date")
     private LocalDate birthDate;
     private LocalDateTime created;
     private LocalDateTime updated;
@@ -57,6 +57,7 @@ public class User implements UserDetails {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToOne(mappedBy = "user")
+    @JsonIgnore
     private Attachment attachments;
 
 
@@ -74,7 +75,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptySet();
+        return Collections.emptyList();
     }
 
     @Override

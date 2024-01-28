@@ -5,6 +5,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OTPRepository extends CrudRepository<OTP, String> {
-
-
 }
