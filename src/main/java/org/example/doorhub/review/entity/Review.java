@@ -12,6 +12,7 @@ import org.example.doorhub.user.entity.User;
 @Data
 @Entity
 public class Review {
+
     @Id
     private Integer id;
     private Integer stars;

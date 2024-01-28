@@ -3,6 +3,7 @@ package org.example.doorhub.category.parent.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.doorhub.category.entity.Category;
+import org.example.doorhub.discount.entity.Discount;
 import org.example.doorhub.review.entity.Review;
 import org.example.doorhub.user.entity.User;
 
@@ -28,6 +29,7 @@ public class ParentCategory {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Category category;
+
 
     @ManyToOne
     @JoinColumn(name = "user_id")

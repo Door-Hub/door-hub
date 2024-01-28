@@ -1,5 +1,6 @@
 package org.example.doorhub.discount.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.doorhub.category.entity.Category;
@@ -23,9 +24,10 @@ public class Discount {
     private LocalDateTime endDate;
 
     @ManyToOne
-    @JoinColumn(name = "parent_category_id")
+    @JsonProperty("parentCategoryId")
+    @JoinColumn(name = "parentCategoryId")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private ParentCategory parentCategory;
-    
+
 }

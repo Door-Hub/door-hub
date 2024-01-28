@@ -2,8 +2,6 @@ package org.example.doorhub.review;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.doorhub.discount.dto.DiscountCreateDto;
-import org.example.doorhub.discount.dto.DiscountResponseDto;
 import org.example.doorhub.review.dto.ReviewCreateDto;
 import org.example.doorhub.review.dto.ReviewResponseDto;
 import org.springframework.http.HttpStatus;

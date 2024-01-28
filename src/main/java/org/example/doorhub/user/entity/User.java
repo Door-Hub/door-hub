@@ -1,5 +1,6 @@
 package org.example.doorhub.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import net.minidev.json.annotate.JsonIgnore;
@@ -43,9 +44,10 @@ public class User implements UserDetails {
     private LocalDateTime created;
     private LocalDateTime updated;
 
-    @OneToMany(mappedBy = "user")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
+    @OneToMany
+    @JoinTable(name = "user_addresses",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "address_id"))
     private List<Address> addresses;
 
     @OneToMany(mappedBy = "user")

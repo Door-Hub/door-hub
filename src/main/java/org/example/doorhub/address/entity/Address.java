@@ -1,9 +1,11 @@
 package org.example.doorhub.address.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.minidev.json.annotate.JsonIgnore;
 import org.example.doorhub.user.entity.User;
 
 
@@ -22,8 +24,9 @@ public class Address {
     private Double latitude;
     private String home;
 
-    @ManyToOne()
-    @JoinColumn(name = "user_Id")
+    @ManyToOne
+    @JsonProperty("userId")
+    @JoinColumn(name = "userId")
     private User user;
 
 }
