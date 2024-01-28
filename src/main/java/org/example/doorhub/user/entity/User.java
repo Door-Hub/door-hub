@@ -2,6 +2,7 @@ package org.example.doorhub.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 import org.example.doorhub.address.entity.Address;
 import org.example.doorhub.attachment.entity.Attachment;
 import org.example.doorhub.book.entity.Book;
@@ -15,10 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -61,6 +59,7 @@ public class User implements UserDetails {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToOne(mappedBy = "user")
+    @JsonIgnore
     private Attachment attachments;
 
 
@@ -78,14 +77,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        for (Role role : roles) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
-            for (Permission permission : role.getPermissions()) {
-                authorities.add(new SimpleGrantedAuthority(permission.toString()));
-            }
-        }
-        return authorities;
+        return Collections.emptyList();
     }
 
     @Override
