@@ -21,6 +21,7 @@ import java.util.Optional;
 @Getter
 public class DiscountService extends GenericCrudService<Discount, Integer, DiscountCreateDto, DiscountUpdateDto, DiscountPatchDto, DiscountResponseDto> {
 
+    //private final DiscountRepository repository;
     private final DiscountRepository repository;
     private final DiscountMapperDto mapper;
     private final Class<Discount> EntityClass = Discount.class;
