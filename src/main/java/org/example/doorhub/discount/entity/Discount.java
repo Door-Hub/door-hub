@@ -3,7 +3,6 @@ package org.example.doorhub.discount.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
-import org.example.doorhub.category.entity.Category;
 import org.example.doorhub.category.parent.entity.ParentCategory;
 import org.example.doorhub.listeners.DiscountStartDate;
 

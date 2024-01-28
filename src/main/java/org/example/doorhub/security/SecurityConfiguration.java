@@ -32,9 +32,9 @@ public class SecurityConfiguration {
                     "/discount/**",
                     "/review/**"
                     "/profile/**"
-                               
+                    "/profile/**"
+            
                             """;
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
