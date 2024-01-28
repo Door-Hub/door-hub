@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.doorhub.attachment.dto.AttachmentResponseDto;
 import org.example.doorhub.attachment.entity.Attachment;
 import org.example.doorhub.common.exception.AttachmentNotFound;
+import org.example.doorhub.common.exception.FileUploadException;
 import org.example.doorhub.user.UserRepository;
 import org.example.doorhub.user.entity.User;
 import org.modelmapper.ModelMapper;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
@@ -34,14 +36,14 @@ public class AttachmentService {
     private String uploadDir;
 
     @Transactional
-    public AttachmentResponseDto processImageUpload(MultipartFile file, Integer userId) {
+    public AttachmentResponseDto processImageUpload(MultipartFile file, Integer userId){
 
         extracted(file);
         try {
             return getAttachmentResponseDto(file, userId);
         } catch (IOException e) {
             log.error("Error uploading file: {}", e.getMessage());
-            throw new RuntimeException("Error uploading file", e);
+            throw new FileUploadException("Error uploading file");
         }
     }
 
@@ -55,7 +57,7 @@ public class AttachmentService {
 
         } catch (IOException e) {
             log.error("Error uploading file: {}", e.getMessage());
-            throw new RuntimeException("Error uploading file", e);
+            throw new FileUploadException("Error uploading file");
         }
     }
 
@@ -93,12 +95,12 @@ public class AttachmentService {
     }
 
     @Transactional
-    protected void deleteFile(String filePath) {
+    protected void deleteFile(String filePath)  {
         try {
             Files.deleteIfExists(Paths.get(filePath));
         } catch (IOException e) {
             log.error("Error deleting file: {}", e.getMessage());
-            throw new RuntimeException("Error deleting file", e);
+            throw new FileUploadException("Error uploading file");
         }
     }
 

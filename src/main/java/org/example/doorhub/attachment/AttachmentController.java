@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.UnsupportedMediaTypeStatusException;
 
 import java.io.IOException;
+import java.nio.file.FileSystemException;
 import java.util.Objects;
 
 @Slf4j
@@ -22,7 +23,7 @@ public class AttachmentController {
 
 
     @PostMapping(value = "/opload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AttachmentResponseDto> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("userId") Integer userId)  {
+    public ResponseEntity<AttachmentResponseDto> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("userId") Integer userId) {
         return switch (Objects.requireNonNull(file.getContentType())) {
             case MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE -> {
                 AttachmentResponseDto attachmentResponseDto = service.processImageUpload(file, userId);

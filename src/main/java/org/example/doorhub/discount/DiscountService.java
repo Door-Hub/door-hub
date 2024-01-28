@@ -4,8 +4,6 @@ package org.example.doorhub.discount;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.example.doorhub.category.CategoryRepository;
-import org.example.doorhub.category.entity.Category;
 import org.example.doorhub.category.parent.ParentRepository;
 import org.example.doorhub.category.parent.entity.ParentCategory;
 import org.example.doorhub.common.service.GenericCrudService;
@@ -15,8 +13,6 @@ import org.example.doorhub.discount.dto.DiscountResponseDto;
 import org.example.doorhub.discount.dto.DiscountUpdateDto;
 import org.example.doorhub.discount.entity.Discount;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

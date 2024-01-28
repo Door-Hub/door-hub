@@ -19,52 +19,45 @@ import java.util.Map;
 
 @Slf4j
 @RestControllerAdvice
-public class CustomExceptionHandler
-{
-    public CustomErrorResponse buildErrorResponse( String message, HttpStatus status )
-    {
-        return buildErrorResponse( message, status, null );
+public class CustomExceptionHandler {
+    public CustomErrorResponse buildErrorResponse(String message, HttpStatus status) {
+        return buildErrorResponse(message, status, null);
     }
 
-    public CustomErrorResponse buildErrorResponse( Map<String, Object> errors, HttpStatus status )
-    {
-        return buildErrorResponse( null, status, errors );
+    public CustomErrorResponse buildErrorResponse(Map<String, Object> errors, HttpStatus status) {
+        return buildErrorResponse(null, status, errors);
     }
 
-    public CustomErrorResponse buildErrorResponse( String message, HttpStatus status, Map<String, Object> errors )
-    {
-        return new CustomErrorResponse( message, status, errors, LocalDateTime.now() );
+    public CustomErrorResponse buildErrorResponse(String message, HttpStatus status, Map<String, Object> errors) {
+        return new CustomErrorResponse(message, status, errors, LocalDateTime.now());
     }
 
-    @ExceptionHandler( Exception.class )
-    public CustomErrorResponse handleExceptions( Exception e )
-    {
-        log.error( e.getMessage(), e );
-        return buildErrorResponse( "Something is wrong, please repeat later", HttpStatus.INTERNAL_SERVER_ERROR );
+    @ExceptionHandler(Exception.class)
+    public CustomErrorResponse handleExceptions(Exception e) {
+        log.error(e.getMessage(), e);
+        return buildErrorResponse("Something is wrong, please repeat later", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler( EntityNotFoundException.class )
-    public ResponseEntity<CustomErrorResponse> handleEntityNotFoundException( EntityNotFoundException e )
-    {
-        log.error( e.getMessage(), e );
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<CustomErrorResponse> handleEntityNotFoundException(EntityNotFoundException e) {
+        log.error(e.getMessage(), e);
         return ResponseEntity
-            .status( HttpStatus.NOT_FOUND )
-            .body( buildErrorResponse( e.getMessage(), HttpStatus.NOT_FOUND ) );
+                .status(HttpStatus.NOT_FOUND)
+                .body(buildErrorResponse(e.getMessage(), HttpStatus.NOT_FOUND));
     }
 
-    @ExceptionHandler( DataIntegrityViolationException.class )
+    @ExceptionHandler(DataIntegrityViolationException.class)
     // todo We need to handle these exceptions correctly
-    public ResponseEntity<CustomErrorResponse> handleDataIntegrityViolationException( DataIntegrityViolationException e )
-    {
-        log.error( e.getMessage(), e );
+    public ResponseEntity<CustomErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException e) {
+        log.error(e.getMessage(), e);
 
         String message = e.getCause() == null ? e.getMessage() : e.getCause().getMessage();
         message = e.getCause().getCause() == null ? message : e.getCause().getCause().getMessage();
         message = e.getCause().getCause().getCause() == null ? message : e.getCause().getCause().getCause().getMessage();
 
         return ResponseEntity
-            .status( HttpStatus.CONFLICT )
-            .body( buildErrorResponse( message, HttpStatus.CONFLICT ) );
+                .status(HttpStatus.CONFLICT)
+                .body(buildErrorResponse(message, HttpStatus.CONFLICT));
     }
 
 //    @ExceptionHandler( MethodArgumentNotValidException.class )
@@ -86,8 +79,8 @@ public class CustomExceptionHandler
 //    }
 
     @ExceptionHandler(NoResourceFoundException.class)
-    public ResponseEntity<CustomErrorResponse> handleNoResourceFoundException(NoResourceFoundException e){
-        log.error(e.getMessage(),e);
+    public ResponseEntity<CustomErrorResponse> handleNoResourceFoundException(NoResourceFoundException e) {
+        log.error(e.getMessage(), e);
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(CustomErrorResponse.builder()
@@ -98,8 +91,8 @@ public class CustomExceptionHandler
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<CustomErrorResponse> handleAccessDeniedException(AccessDeniedException e){
-        log.error(e.getMessage(),e);
+    public ResponseEntity<CustomErrorResponse> handleAccessDeniedException(AccessDeniedException e) {
+        log.error(e.getMessage(), e);
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
                 .body(CustomErrorResponse.builder()
@@ -108,9 +101,10 @@ public class CustomExceptionHandler
                         .status(HttpStatus.FORBIDDEN)
                         .build());
     }
+
     @ExceptionHandler(PhoneNumberNotVerifiedException.class)
-    public ResponseEntity<CustomErrorResponse> handlePhoneNumberNotVerifiedException(PhoneNumberNotVerifiedException e){
-        log.error(e.getMessage(),e);
+    public ResponseEntity<CustomErrorResponse> handlePhoneNumberNotVerifiedException(PhoneNumberNotVerifiedException e) {
+        log.error(e.getMessage(), e);
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
                 .body(CustomErrorResponse.builder()
@@ -119,9 +113,10 @@ public class CustomExceptionHandler
                         .status(HttpStatus.FORBIDDEN)
                         .build());
     }
+
     @ExceptionHandler(SmsVerificationException.class)
-    public ResponseEntity<CustomErrorResponse> handleSmsVerificationException(SmsVerificationException e){
-        log.error(e.getMessage(),e);
+    public ResponseEntity<CustomErrorResponse> handleSmsVerificationException(SmsVerificationException e) {
+        log.error(e.getMessage(), e);
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
                 .body(CustomErrorResponse.builder()
@@ -132,8 +127,8 @@ public class CustomExceptionHandler
     }
 
     @ExceptionHandler(CustomExceptionThisUsernameOlReadyTaken.class)
-    public ResponseEntity<CustomErrorResponse> handleSmsVerificationException(CustomExceptionThisUsernameOlReadyTaken e){
-        log.error(e.getMessage(),e);
+    public ResponseEntity<CustomErrorResponse> handleSmsVerificationException(CustomExceptionThisUsernameOlReadyTaken e) {
+        log.error(e.getMessage(), e);
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(CustomErrorResponse.builder()
@@ -144,8 +139,8 @@ public class CustomExceptionHandler
     }
 
     @ExceptionHandler(ExceptionUNAUTHORIZED.class)
-    public ResponseEntity<CustomErrorResponse> handleSmsVerificationException(ExceptionUNAUTHORIZED e){
-        log.error(e.getMessage(),e);
+    public ResponseEntity<CustomErrorResponse> handleSmsVerificationException(ExceptionUNAUTHORIZED e) {
+        log.error(e.getMessage(), e);
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(CustomErrorResponse.builder()
@@ -178,6 +173,7 @@ public class CustomExceptionHandler
                         .status(HttpStatus.NOT_FOUND)
                         .build());
     }
+
     @ExceptionHandler(value = AttachmentNotFound.class)
     public ResponseEntity<CustomErrorResponse> handleSmsAlreadySentException(AttachmentNotFound e) {
         log.error(e.getMessage(), e);
@@ -187,6 +183,18 @@ public class CustomExceptionHandler
                         .message(e.getMessage())
                         .timestamp(LocalDateTime.now())
                         .status(HttpStatus.NOT_FOUND)
+                        .build());
+    }
+
+    @ExceptionHandler(value = FileUploadException.class)
+    public ResponseEntity<CustomErrorResponse> handleSmsAlreadySentException(FileUploadException e) {
+        log.error(e.getMessage(), e);
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(CustomErrorResponse.builder()
+                        .message(e.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .build());
     }
 
