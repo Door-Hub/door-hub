@@ -6,7 +6,6 @@ import org.example.doorhub.user.entity.User;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -32,13 +31,8 @@ public class Attachment {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToOne()
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
-/*    @OneToOne
-//    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;*/
 
-/*    @OneToMany(mappedBy = "attachment_id",fetch = FetchType.EAGER)
-    private List<Recipe_attachment>recipeAttachments*/;
 }

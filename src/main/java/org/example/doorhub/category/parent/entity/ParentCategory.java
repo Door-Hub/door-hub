@@ -24,7 +24,7 @@ public class ParentCategory {
     private String avatar;
 
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JsonProperty("categoryId")
     @JoinColumn(name = "category_id")
     @EqualsAndHashCode.Exclude
@@ -40,7 +40,7 @@ public class ParentCategory {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany()
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinTable(name = "parent_views",
             joinColumns = @JoinColumn(name = "parent_id"),
             inverseJoinColumns = @JoinColumn(name = "view_id")
@@ -48,7 +48,7 @@ public class ParentCategory {
     private List<Review> views;
 
 
-    @OneToMany()
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinTable(name = "parent_discounts",
             joinColumns = @JoinColumn(name = "parent_id"),
             inverseJoinColumns = @JoinColumn(name = "discount_id")

@@ -22,7 +22,7 @@ public class Address {
     private String locationName;
     private String home;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JsonProperty("userId")
     @JoinColumn(name = "userId")
     private User user;

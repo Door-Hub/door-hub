@@ -33,7 +33,7 @@ public class AttachmentService {
     @Value("${service.upload.dir}")
     private String uploadDir;
 
-    public AttachmentResponseDto processImageUpload(MultipartFile file, Integer userId) throws IOException {
+    public AttachmentResponseDto processImageUpload(MultipartFile file, Integer userId) {
 
         if (file.isEmpty()) {
             log.error("Empty file uploaded");
@@ -43,7 +43,8 @@ public class AttachmentService {
         try {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new EntityNotFoundException("User with id = %s not found".formatted(userId)));
-            File destFile = Paths.get(uploadDir+"\\resources\\img\\UserImg", file.getOriginalFilename()).toFile();
+
+            File destFile = Paths.get(uploadDir, file.getOriginalFilename()).toFile();
             file.transferTo(destFile);
             log.info("Uploaded: {}", destFile);
 
@@ -57,6 +58,7 @@ public class AttachmentService {
             Attachment saved = repository.save(map);
 
             user.setAttachment(saved);
+            user.setAvatar(attachment.getUrl());
 
             userRepository.save(user);
 
@@ -67,15 +69,15 @@ public class AttachmentService {
         }
     }
 
-
     public AttachmentResponseDto processImageUpdate(MultipartFile file, Integer userId) {
+
         if (file.isEmpty()) {
             log.error("Empty file uploaded");
             throw new IllegalArgumentException("Empty file uploaded");
         }
 
-        try{
-            File destFile = Paths.get(uploadDir+"\\resources\\img\\UserImg", file.getOriginalFilename()).toFile();
+        try {
+            File destFile = Paths.get(uploadDir, file.getOriginalFilename()).toFile();
             file.transferTo(destFile);
             log.info("Uploaded: {}", destFile);
 
@@ -89,20 +91,21 @@ public class AttachmentService {
             attachment.setId(user.getAttachment().getId());
             attachment.setFile_name(file.getOriginalFilename());
             attachment.setFileType(Objects.requireNonNull(file.getContentType()));
-            attachment.setUrl(String.valueOf(Paths.get(uploadDir+"\\resources\\img\\UserImg", file.getOriginalFilename())));
+            attachment.setUrl(String.valueOf(Paths.get( uploadDir , file.getOriginalFilename())));
             attachment.setUploadTime(LocalDateTime.now());
 
             Attachment saved = repository.save(attachment);
 
             return mapper.map(saved, AttachmentResponseDto.class);
 
-        } catch (IOException e){
+        } catch (IOException e) {
             log.error("Error uploading file: {}", e.getMessage());
             throw new RuntimeException("Error uploading file", e);
         }
     }
 
     private void deleteFile(String filePath) {
+
         try {
             Files.deleteIfExists(Paths.get(filePath));
         } catch (IOException e) {
@@ -113,17 +116,15 @@ public class AttachmentService {
 
 
     public void deleteAttachment(Integer userId) {
+
         User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        // Get the attachment associated with the user
         Attachment attachment = user.getAttachment();
 
         if (attachment != null) {
-            // Remove the reference to the attachment from the user
             user.setAttachment(null);
             userRepository.save(user);
 
-            // Delete the attachment and corresponding file
             Integer attachmentID = attachment.getId();
             repository.deleteById(attachmentID);
             deleteFile(attachment.getUrl());

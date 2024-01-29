@@ -1,9 +1,6 @@
 package org.example.doorhub.book.entity;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.*;
 import org.example.doorhub.user.entity.User;
 
@@ -17,6 +14,7 @@ import java.time.LocalDateTime;
 public class Book {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private Double hourlyRate;
     private LocalDate startDate;
@@ -27,12 +25,12 @@ public class Book {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToOne(mappedBy = "book",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToOne(mappedBy = "book")
     private User worker;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToOne(mappedBy = "book",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToOne(mappedBy = "book")
     private User booker;
 
 }

@@ -147,7 +147,7 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
         otp.setSendTime(LocalDateTime.now());
         otp.setSentCount(1);
 
-        boolean sendSms = smsNotificationService.sendSms(otp.getPhoneNumber(), "Your verification code: %d".formatted(code));
+        boolean sendSms = smsNotificationService.sendSms(otp.getPhoneNumber(), "Door Hub => your verification code: %d".formatted(code));
         if (sendSms) {
             OTP save = otpRepository.save(otp);
             return modelMapper.map(save, UserResponseDto.class);
