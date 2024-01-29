@@ -1,7 +1,5 @@
 package org.example.doorhub.user.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.doorhub.address.entity.Address;
@@ -10,14 +8,14 @@ import org.example.doorhub.book.entity.Book;
 import org.example.doorhub.category.parent.entity.ParentCategory;
 import org.example.doorhub.listeners.UserCreatedUpdated;
 import org.example.doorhub.review.entity.Review;
-import org.hibernate.annotations.BatchSize;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -43,7 +41,7 @@ public class User implements UserDetails {
     private LocalDateTime created;
     private LocalDateTime updated;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @JoinTable(name = "user_addresses",
@@ -51,23 +49,22 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "address_id"))
     private List<Address> addresses;
 
-    @OneToMany()
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @JoinTable(name = "user_categories",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id"))
+            inverseJoinColumns = @JoinColumn(name = "categoriy_id"))
     private List<ParentCategory> categories;
 
     @Enumerated(EnumType.STRING)
     private List<Role> roles;
 
 
-    @OneToOne
-    @JsonProperty("attachment_id")
-    @JoinColumn(name = "attachment_id")
-    private Attachment attachment;
-
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
+    private Attachment attachments;
 
 
     @ToString.Exclude
@@ -79,7 +76,7 @@ public class User implements UserDetails {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany()
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
     @JoinTable(name = "user_reviews",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "review_id"))
@@ -87,13 +84,6 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-//        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-//        for (Role role : roles) {
-//            authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
-//            for (Permission permission : role.getPermissions()) {
-//                authorities.add(new SimpleGrantedAuthority(permission.toString()));
-//            }
-//        }
         return Collections.emptyList();
     }
 
