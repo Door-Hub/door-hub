@@ -25,7 +25,9 @@ public class SecurityConfiguration {
                     "/**" ,
                     "/oauth2/**",
                     "/login/**",
-                                
+                    
+                    "/auth/**",
+                    "/notification/**",         
                     "/category/**",
                     "/user/**",
                     "/book/**",

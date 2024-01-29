@@ -6,8 +6,10 @@ import org.example.doorhub.common.rsql.SpecificationBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.ResponseEntity;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 public abstract class GenericCrudService<ENTITY, ID, CREATE_DTO, UPDATE_DTO, PATCH_DTO, RESPONSE_DTO>
 {
