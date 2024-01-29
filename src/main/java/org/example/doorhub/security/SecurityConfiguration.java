@@ -35,6 +35,7 @@ public class SecurityConfiguration {
                     "/book/**",
                     "/discount/**",
                     "/review/**"
+                    "/api/files/**"
                                 
                             """;
 

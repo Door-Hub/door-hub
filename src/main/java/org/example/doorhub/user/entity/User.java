@@ -1,5 +1,7 @@
 package org.example.doorhub.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.doorhub.address.entity.Address;
@@ -8,6 +10,7 @@ import org.example.doorhub.book.entity.Book;
 import org.example.doorhub.category.parent.entity.ParentCategory;
 import org.example.doorhub.listeners.UserCreatedUpdated;
 import org.example.doorhub.review.entity.Review;
+import org.hibernate.annotations.BatchSize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -60,10 +63,11 @@ public class User implements UserDetails {
     private List<Role> roles;
 
 
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @OneToOne(mappedBy = "user")
-    private Attachment attachments;
+    @OneToOne
+    @JsonProperty("attachment_id")
+    @JoinColumn(name = "attachment_id")
+    private Attachment attachment;
+
 
 
     @ToString.Exclude
@@ -83,14 +87,14 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        for (Role role : roles) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
-            for (Permission permission : role.getPermissions()) {
-                authorities.add(new SimpleGrantedAuthority(permission.toString()));
-            }
-        }
-        return authorities;
+//        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+//        for (Role role : roles) {
+//            authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
+//            for (Permission permission : role.getPermissions()) {
+//                authorities.add(new SimpleGrantedAuthority(permission.toString()));
+//            }
+//        }
+        return Collections.emptyList();
     }
 
     @Override

@@ -9,6 +9,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Map;
 import java.util.Optional;
 
@@ -29,6 +30,9 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
         String givenName = (String) attributes.get("given_name");
         String family_name = (String) attributes.get("family_name");
         String name = (String) attributes.get("name");
+        LocalDate birthdate = (LocalDate) attributes.get("birthdate");
+        String gender = (String) attributes.get("gender");
+        String phoneNumber = (String) attributes.get("phoneNumber");
 
 
         System.out.println("attributes = " + attributes);
@@ -41,6 +45,9 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
             newUser.setFirstname(name);
             newUser.setAvatar(avatarUrl);
             newUser.setAvatar(picture);
+            newUser.setPhoneNumber(phoneNumber);
+            newUser.setGender(gender);
+            newUser.setBirthDate(birthdate);
             userRepository.save(newUser);
         }
         return oAuth2User;
