@@ -1,5 +1,7 @@
 package org.example.doorhub.security;
 
+import lombok.RequiredArgsConstructor;
+import org.example.doorhub.jwt.JwtSecurityFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -8,11 +10,13 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.security.config.Customizer.*;
 
 @Configuration
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfiguration {
 
     final String MATCHERS =
@@ -22,23 +26,20 @@ public class SecurityConfiguration {
                     "/v3/api-docs/**",
                     "/swagger-resources/**",
                     "/webjars/** ,
-                    "/**" ,
                     "/oauth2/**",
                     "/login/**",
-                    
+                                        
                     "/auth/**",
-                    "/notification/**",         
+                    "/notification/**",   
                     "/category/**",
-                    "/user/**",
                     "/book/**",
                     "/discount/**",
                     "/review/**"
-                    "/profile/**"
-                    "/profile/**"
-            
+                                
                             """;
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, JwtSecurityFilter filter) throws Exception {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
@@ -46,9 +47,11 @@ public class SecurityConfiguration {
                         registry -> {
                             registry.requestMatchers(MATCHERS)
                                     .permitAll()
-                                    .anyRequest().authenticated();
+                                    .anyRequest()
+                                    .authenticated();
                         }
                 )
+                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login(withDefaults())
                 .formLogin(withDefaults())
                 .build();

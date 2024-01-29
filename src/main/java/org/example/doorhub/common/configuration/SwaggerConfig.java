@@ -45,38 +45,15 @@ public class SwaggerConfig {
                         new Server()
                                 .url("http://localhost:8080/")
                                 .description("Production")
-                ))
-                .addSecurityItem(new SecurityRequirement().addList("bearerAuth", "google        Auth").addList("githubAuth"))
+                )).addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
                 .components(new Components()
                         .addSecuritySchemes("bearerAuth", new SecurityScheme()
                                 .name("bearerAuth")
                                 .type(SecurityScheme.Type.HTTP)
                                 .scheme("bearer")
-                                .bearerFormat("JWT"))
-                        .addSecuritySchemes("googleAuth", new SecurityScheme()
-                                .name("googleAuth")
-                                .type(SecurityScheme.Type.OAUTH2)
-                                .flows(new OAuthFlows()
-                                        .authorizationCode(new OAuthFlow()
-                                                .tokenUrl("https://accounts.google.com/o/oauth2/token")
-                                                .authorizationUrl("https://accounts.google.com/o/oauth2/auth")
-                                                .scopes(new Scopes().addString("openid", "email"))
-                                        )
-                                )
+                                .bearerFormat("JWT")));
 
-                        )
-                        .addSecuritySchemes("githubAuth", new SecurityScheme()
-                                .name("githubAuth")
-                                .type(SecurityScheme.Type.OAUTH2)
-                                .flows(new OAuthFlows()
-                                        .authorizationCode(new OAuthFlow()
-                                                .tokenUrl("https://github.com/login/oauth/access_token")
-                                                .authorizationUrl("https://github.com/login/oauth/authorize")
-                                                .scopes(new Scopes().addString("read:user", "user:email"))
-                                        )
-                                )
-                        )
-                );
+
     }
 
 }
