@@ -15,8 +15,11 @@ databaseChangeLog:
       file: changelog/category/create-category-table.yaml
       relativeToChangelogFile: true
   - include:
-      file: changelog/role/create-role-table.yaml
+      file: changelog/review/create-review-table.yaml
       relativeToChangelogFile: true
   - include:
-      file: changelog/review/create-review-table.yaml
+      file: changelog/discount/create-discount-table.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: changelog/role-permission/create-role-permission-table.yaml
       relativeToChangelogFile: true

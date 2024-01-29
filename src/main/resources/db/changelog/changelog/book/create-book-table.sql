@@ -1,12 +1,16 @@
-create table "book"
+CREATE TABLE book
 (
-  id int primary key generated always as identity ,
-  booker int,
-  worker int,
-  hourlyRate double precision,
-  startDate timestamp,
-  endDate timestamp,
-  accepted BOOLEAN,
-  user_id int,
-  foreign key (user_id) references "user"(id)
+    id SERIAL PRIMARY KEY,
+    hourly_rate DOUBLE PRECISION,
+    start_date DATE,
+    start_time TIMESTAMP,
+    end_time TIMESTAMP,
+    type_of_property VARCHAR(255),
+    description TEXT,
+    accepted BOOLEAN,
+    user_id int,
+    worker_id INT REFERENCES "user"(id) on DELETE cascade ,
+    booker_id INT REFERENCES "user"(id) on DELETE cascade,
+    FOREIGN KEY (user_id) REFERENCES "user" (id) ON DELETE CASCADE
+
 );

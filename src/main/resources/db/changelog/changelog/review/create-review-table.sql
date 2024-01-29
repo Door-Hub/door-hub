@@ -1,9 +1,8 @@
-create table "review"
+CREATE TABLE "review"
 (
-    id          int primary key,
-    user_id     int,
-    category_id int,
-    starts      int,
-    foreign key (user_id) references "user" (id),
-    foreign key (category_id) references category (id)
+    id                 SERIAL PRIMARY KEY,
+    stars              INTEGER,
+    seenUsers          INTEGER,
+    users_id int references "user"(id) on delete cascade,
+    parent_category_id int references parent(id) on delete cascade
 );

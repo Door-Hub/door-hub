@@ -1,15 +1,29 @@
 databaseChangeLog:
-  - changeSet:
-      id: create category table
-      author: diyorbek2110@gmail.com
-      changes:
-        - sqlFile:
-            path: create-category-table.sql
-            relativeToChangelogFile: true
-#  - changeSet:
-#      id: create category stars table
-#      author: diyorbek2110@gmail.com
-#      changes:
-#        - sqlFile:
-#            path: create-user-category-stars-table.sql
-#            relativeToChangelogFile: true
+    - changeSet:
+          id: create category table
+          author: diyorbek2110@gmail.com
+          changes:
+              - sqlFile:
+                    path: create-category-table.sql
+                    relativeToChangelogFile: true
+    - changeSet:
+          id: create parent table
+          author: diyorbek2110@gmail.com
+          changes:
+              - sqlFile:
+                    path: create-parent-table.sql
+                    relativeToChangelogFile: true
+    - changeSet:
+          id: create category-parent table
+          author: diyorbek2110@gmail.com
+          changes:
+              - sqlFile:
+                    path: create-category-parent-table.sql
+                    relativeToChangelogFile: true
+    - changeSet:
+        id: create user-category table
+        author: diyorbek2110@gmail.com
+        changes:
+          - sqlFile:
+              path: create-user-category-table.sql
+              relativeToChangelogFile: true

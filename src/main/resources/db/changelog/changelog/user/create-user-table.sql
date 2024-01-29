@@ -1,19 +1,19 @@
-create type "role" as enum ('USER','WORKER');
+CREATE TYPE "role" AS ENUM ('USER', 'WORKER');
 
-create table "user"
+CREATE TABLE "user"
 (
-    id           int PRIMARY KEY generated always as identity,
-    firstname    VARCHAR(255) not null,
-    lastname     VARCHAR(255) not null,
+    id           SERIAL PRIMARY KEY ,
+    firstname    VARCHAR(255) NOT NULL,
+    lastname     VARCHAR(255) NOT NULL,
     avatar       VARCHAR(255),
     username     VARCHAR(255),
-    phone_number VARCHAR(20) unique ,
-    email        VARCHAR(255) unique,
-    gender       VARCHAR(10),
-    birth_date   timestamp,
-    created      timestamp,
-    updated      timestamp,
-    role         role         not null,
-    book_id      int
+    phone_number VARCHAR(20) UNIQUE,
+    email        VARCHAR(255) UNIQUE,
+    gender       VARCHAR(20),
+    birth_date   TIMESTAMP,
+    created      TIMESTAMP,
+    updated      TIMESTAMP,
+    role         "role",
+    book_id      INT,
+    roles        VARCHAR(255) ARRAY
 );
-
