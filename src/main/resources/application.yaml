@@ -48,4 +48,4 @@ location:
 
 service:
   upload:
-     dir: C:\Users\Acer\java-projects\door-hub\src\main\resources\img
+     dir: D:\IntelligeaIDEA\door-hub\src\main\resources\image

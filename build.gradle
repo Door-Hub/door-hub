@@ -46,6 +46,12 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
     implementation 'cz.jirutka.rsql:rsql-parser:2.1.0'
 
+    // https://mvnrepository.com/artifact/com.google.firebase/firebase-admin
+    implementation 'com.google.firebase:firebase-admin:9.2.0'
+
+    implementation 'jakarta.mail:jakarta.mail-api:1.6.5'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
 }
 
 dependencyManagement {
