@@ -19,7 +19,9 @@ public class Book {
     private Integer id;
     private Double hourlyRate;
     private LocalDate startDate;
-    private LocalDateTime endDate;
+    private LocalDateTime startTime;
+    private TypeOfProperty typeOfProperty;
+    private String description;
     private boolean Accepted;
 
     @ToString.Exclude
