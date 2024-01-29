@@ -4,13 +4,16 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class NotificationMessagingService {
-    @Autowired
-    private FirebaseMessaging firebaseMessaging;
+
+    private final FirebaseMessaging firebaseMessaging;
 
     public String sendNotificationByToken(NotificationMessage notificationMessage) {
         Notification notification = Notification
@@ -31,7 +34,6 @@ public class NotificationMessagingService {
             firebaseMessaging.send(message);
             return "Success sending notification";
         } catch (FirebaseMessagingException e) {
-            e.printStackTrace();
             return "Error sending notification";
         }
     }
