@@ -23,7 +23,7 @@ public class Category {
 
 
 
-    @OneToMany()
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
     @JoinTable(name = "category_parents",
             joinColumns = @JoinColumn(name = "category_id"),
             inverseJoinColumns = @JoinColumn(name = "parent_id")

@@ -1,10 +1,8 @@
 package org.example.doorhub.attachment.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.example.doorhub.user.entity.User;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -32,6 +30,11 @@ public class Attachment {
     @CreationTimestamp
     private LocalDateTime uploadTime;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 /*    @OneToOne
 //    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;*/
