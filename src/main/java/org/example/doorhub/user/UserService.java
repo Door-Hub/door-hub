@@ -5,7 +5,6 @@ import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.doorhub.address.AddressRepository;
-import org.example.doorhub.address.entity.Address;
 import org.example.doorhub.common.exception.CustomExceptionThisUsernameOlReadyTaken;
 import org.example.doorhub.common.exception.ExceptionUNAUTHORIZED;
 import org.example.doorhub.common.exception.SmsAlreadySentException;
@@ -66,7 +65,7 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
     }
 
     @Transactional
-    public UserResponseDto signIn(UserSignInDto signInDto) {
+    public RegisterSignInResponseDto signIn(UserSignInDto signInDto) {
         String phoneNumber = signInDto.getPhoneNumber();
 
         User user = repository
@@ -79,22 +78,7 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
             throw new SmsAlreadySentException("sms ol ready");
         }
 
-        return sendSms(mapper.toCreateDto(user));
-    }
-
-
-    @Transactional
-    public UserResponseDto addUserAddress(Integer userid, Integer addressId) {
-
-        User user = repository.findById(userid)
-                .orElseThrow(() -> new EntityNotFoundException("user with id = %d not found".formatted(userid)));
-        Address address = addressRepository.findById(addressId)
-                .orElseThrow(() -> new EntityNotFoundException("address with id = %d not found".formatted(addressId)));
-
-        user.getAddresses().add(address);
-
-        User save = repository.save(user);
-        return mapper.toResponseDto(save);
+        return modelMapper.map(sendSms(mapper.toCreateDto(user)), RegisterSignInResponseDto.class);
     }
 
     @Transactional
@@ -111,7 +95,9 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
 
             otpRepository.delete(otp);
 
-            return modelMapper.map(save, UserResponseDto.class);
+            UserResponseDto responseDto = modelMapper.map(save, UserResponseDto.class);
+            responseDto.setId(save.getId());
+            return responseDto;
         } else {
             throw new SmsVerificationException("Invalid verification code");
         }
@@ -119,28 +105,38 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
 
     @Transactional
     public UserResponseDto signInVerifyOtp(OtpVerifyDto verifyDto) {
+
         OTP otp = otpRepository
                 .findById(verifyDto.getPhone())
                 .orElseThrow(() -> new ExceptionUNAUTHORIZED("You need to register first"));
+        User entity = repository
+                .findUserByPhoneNumber(verifyDto.getPhone())
+                .orElseThrow(() -> new EntityNotFoundException("user phone not found"));
+
         if (otp.getCode() == verifyDto.getCode()) {
+
             User user = modelMapper.map(otp, User.class);
             otpRepository.delete(otp);
-            return mapper.toResponseDto(user);
+
+
+            UserResponseDto responseDto = mapper.toResponseDto(user);
+            responseDto.setId(entity.getId());
+            return responseDto;
         } else {
             throw new SmsVerificationException("Invalid verification code");
         }
     }
 
     @Transactional
-    public UserResponseDto register(UserCreateDto userCreateDto) throws CustomExceptionThisUsernameOlReadyTaken {
+    public RegisterSignInResponseDto register(UserCreateDto userCreateDto) throws CustomExceptionThisUsernameOlReadyTaken {
 
         try {
             validateUser(userCreateDto);
         } catch (CustomExceptionThisUsernameOlReadyTaken e) {
             throw new CustomExceptionThisUsernameOlReadyTaken("Username ol ready taken");
         }
-        return sendSms(userCreateDto);
 
+        return modelMapper.map(sendSms(userCreateDto), RegisterSignInResponseDto.class);
     }
 
     private UserResponseDto sendSms(UserCreateDto userCreateDto) {

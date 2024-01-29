@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.doorhub.common.exception.CustomExceptionThisUsernameOlReadyTaken;
 import org.example.doorhub.jwt.JwtService;
 import org.example.doorhub.otp.dto.OtpVerifyDto;
+import org.example.doorhub.user.dto.RegisterSignInResponseDto;
 import org.example.doorhub.user.dto.UserCreateDto;
 import org.example.doorhub.user.dto.UserResponseDto;
 import org.example.doorhub.user.dto.UserSignInDto;
@@ -29,14 +30,14 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDto> register(@RequestBody @Valid UserCreateDto userRegisterRequestDto) throws CustomExceptionThisUsernameOlReadyTaken {
-        UserResponseDto userResponseDto = userService.register(userRegisterRequestDto);
+    public ResponseEntity<RegisterSignInResponseDto> register(@RequestBody @Valid UserCreateDto userRegisterRequestDto) throws CustomExceptionThisUsernameOlReadyTaken {
+        RegisterSignInResponseDto userResponseDto = userService.register(userRegisterRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDto);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserResponseDto> signIn(@RequestBody @Valid UserSignInDto signInDto) {
-        UserResponseDto userResponseDto = userService.signIn(signInDto);
+    public ResponseEntity<RegisterSignInResponseDto> signIn(@RequestBody @Valid UserSignInDto signInDto) {
+        RegisterSignInResponseDto userResponseDto = userService.signIn(signInDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDto);
     }
 

@@ -36,7 +36,6 @@ public class User implements UserDetails {
     private String phoneNumber;
     private String gender;
     private String email;
-
     @Column(name = "birth_date")
     private LocalDate birthDate;
     private LocalDateTime created;
