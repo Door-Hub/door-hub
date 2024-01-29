@@ -3,7 +3,6 @@ package org.example.doorhub.attachment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.doorhub.attachment.dto.AttachmentResponseDto;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,23 +10,23 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.UnsupportedMediaTypeStatusException;
 
 import java.io.IOException;
-import java.nio.file.FileSystemException;
 import java.util.Objects;
 
 @Slf4j
 @RestController
-@RequestMapping("api/files")
+@RequestMapping("/api/files")
 @RequiredArgsConstructor
 public class AttachmentController {
     private final AttachmentService service;
 
-
-    @PostMapping(value = "/opload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AttachmentResponseDto> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("userId") Integer userId) {
+    @PostMapping( value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AttachmentResponseDto> uploadFile(@RequestParam("file")MultipartFile file, @RequestParam("userId") Integer userId) throws IOException {
         return switch (Objects.requireNonNull(file.getContentType())) {
-            case MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE -> {
+            case MediaType.IMAGE_GIF_VALUE,
+                    MediaType.IMAGE_JPEG_VALUE,
+                    MediaType.IMAGE_PNG_VALUE -> {
                 AttachmentResponseDto attachmentResponseDto = service.processImageUpload(file, userId);
-                yield ResponseEntity.status(HttpStatus.CREATED).body(attachmentResponseDto);
+                yield ResponseEntity.ok(attachmentResponseDto);
             }
             default -> {
                 log.error("Unsupported filetype: {}", file.getContentType());
@@ -38,8 +37,8 @@ public class AttachmentController {
 
     }
 
-    @PutMapping(value = "/opload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AttachmentResponseDto> updateFile(@RequestParam("file") MultipartFile file, @RequestParam("userId") Integer userId) {
+    @PutMapping( value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AttachmentResponseDto> updateFile(@RequestParam("file")MultipartFile file, @RequestParam("userId") Integer userId) throws IOException {
         return switch (Objects.requireNonNull(file.getContentType())) {
             case MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE -> {
                 AttachmentResponseDto attachmentResponseDto = service.processImageUpdate(file, userId);
@@ -55,8 +54,9 @@ public class AttachmentController {
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<?> delete(@PathVariable Integer userId) {
+    public ResponseEntity<?> delete( @PathVariable Integer userId){
         service.deleteAttachment(userId);
         return ResponseEntity.noContent().build();
     }
+
 }

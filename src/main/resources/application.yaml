@@ -14,6 +14,10 @@ spring:
           github:
             client-id: 3a3bd55b1ab6054f3b18
             client-secret: 9c58751edfa9f9b90a757a4ec23962537b26a2d7
+            scope:
+              - user:email
+              - user:name
+              - user:location
           facebook:
             client-id: 1504689346758899
             client-secret: bbf4ca1ea0ead55c52ef25d43f618527
@@ -30,6 +34,7 @@ spring:
         show_sql: true
     hibernate:
       ddl-auto: update
+    open-in-view: false
 
   application:
     name: door-hub
@@ -48,4 +53,4 @@ location:
 
 service:
   upload:
-     dir: D:\IntelligeaIDEA\door-hub\src\main\resources\image
+     dir: C:\Users\Acer\java-projects\door-hub\src\main\resources\img\UserImg
