@@ -1,15 +1,15 @@
 databaseChangeLog:
   - changeSet:
-      id: create address table
+      id: create discount table
       author: diyorbek2110@gmail.com
       changes:
         - sqlFile:
-            path: create-address-table.sql
+            path: create-discount-table.sql
             relativeToChangelogFile: true
   - changeSet:
-      id: create user-addresses table
+      id: create parent-discount table
       author: diyorbek2110@gmail.com
       changes:
         - sqlFile:
-            path: create-user-address-table.sql
+            path: create-parent-discount-table.sql
             relativeToChangelogFile: true

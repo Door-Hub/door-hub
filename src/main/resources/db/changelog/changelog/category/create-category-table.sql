@@ -1,13 +1,7 @@
-create table "category"
+CREATE TABLE category
 (
-    id          int primary key,
-    name        varchar(255) not null,
-    avatar      varchar(255),
-    stars       int,
-    category_id int,
-    user_id     int,
-    foreign key (user_id) references "user" (id)
+    id     SERIAL PRIMARY KEY,
+    name   VARCHAR(255) NOT NULL,
+    avatar VARCHAR(255)
 );
-
-
 

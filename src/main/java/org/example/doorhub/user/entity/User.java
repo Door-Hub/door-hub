@@ -53,7 +53,7 @@ public class User implements UserDetails {
     @ToString.Exclude
     @JoinTable(name = "user_categories",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "categoriy_id"))
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
     private List<ParentCategory> categories;
 
     @Enumerated(EnumType.STRING)

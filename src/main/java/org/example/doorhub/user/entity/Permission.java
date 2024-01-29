@@ -5,6 +5,4 @@ public enum Permission {
     UPDATE,
     DELETE,
     GET_ALL,
-
-
 }

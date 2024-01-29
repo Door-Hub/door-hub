@@ -8,8 +8,8 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 
 @SpringBootApplication
 @EnableJpaAuditing
-@EnableFeignClients
 @EnableRedisRepositories
+@EnableFeignClients
 public class DoorHubApplication {
     public static void main(String[] args)
     {

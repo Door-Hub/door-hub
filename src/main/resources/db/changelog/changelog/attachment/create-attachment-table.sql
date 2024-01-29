@@ -1,10 +1,10 @@
-create table "attachment"
+CREATE TABLE attachment
 (
-    id               int primary key,
-    fileName         varchar(255),
-    originalFileName varchar(255),
-    url              varchar(255),
-    fileType         varchar(255),
-    user_id          int,
-    foreign key (user_id) references "user"(id)
+    id          SERIAL PRIMARY KEY,
+    file_name   VARCHAR(255) NOT NULL,
+    file_type   VARCHAR(255) NOT NULL,
+    url         VARCHAR(255),
+    upload_time TIMESTAMP    NOT NULL,
+    user_id     INT,
+    FOREIGN KEY (user_id) REFERENCES "user" (id) on delete cascade
 );
