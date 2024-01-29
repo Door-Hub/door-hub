@@ -133,7 +133,7 @@ public class UserService extends GenericCrudService<User, Integer, UserCreateDto
         try {
             validateUser(userCreateDto);
         } catch (CustomExceptionThisUsernameOlReadyTaken e) {
-            throw new CustomExceptionThisUsernameOlReadyTaken("Username ol ready taken");
+            throw new CustomExceptionThisUsernameOlReadyTaken("phone number ol ready taken");
         }
 
         return modelMapper.map(sendSms(userCreateDto), RegisterSignInResponseDto.class);

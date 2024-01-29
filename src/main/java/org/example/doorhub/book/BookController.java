@@ -4,9 +4,7 @@ package org.example.doorhub.book;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.doorhub.book.dto.BookCreateDto;
-import org.example.doorhub.book.dto.BookPatchDto;
 import org.example.doorhub.book.dto.BookResponseDto;
-import org.example.doorhub.book.dto.BookUpdateDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -39,19 +37,6 @@ public class BookController {
         return ResponseEntity.ok(responseDto);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<BookResponseDto> updateBook(@PathVariable Integer id,
-                                                      @RequestBody @Valid BookUpdateDto updateDto) {
-        BookResponseDto responseDto = service.update(id, updateDto);
-        return ResponseEntity.ok(responseDto);
-    }
-
-    @PatchMapping("/{id}")
-    public ResponseEntity<BookResponseDto> patchBook(@PathVariable Integer id
-            , @RequestBody BookPatchDto patchDto) throws NoSuchFieldException, IllegalAccessException {
-        BookResponseDto responseDto = service.patch(id, patchDto);
-        return ResponseEntity.ok(responseDto);
-    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) {

@@ -17,6 +17,7 @@ public class BookCreateDto {
     private Double hourlyRate;
     private LocalDate startDate;
     private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private TypeOfProperty typeOfProperty;
     private String description;
     private boolean Accepted;

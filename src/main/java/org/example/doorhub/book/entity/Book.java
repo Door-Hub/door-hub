@@ -1,8 +1,6 @@
 package org.example.doorhub.book.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.*;
 import org.example.doorhub.user.entity.User;
 
@@ -16,10 +14,14 @@ import java.time.LocalDateTime;
 public class Book {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private Double hourlyRate;
     private LocalDate startDate;
     private LocalDateTime startTime;
+    private LocalDateTime endTime;
+    @Enumerated(EnumType.STRING)
     private TypeOfProperty typeOfProperty;
     private String description;
     private boolean Accepted;

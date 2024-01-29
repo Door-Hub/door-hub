@@ -2,6 +2,7 @@ package org.example.doorhub.book;
 
 import org.example.doorhub.book.entity.Book;
 import org.example.doorhub.common.repository.GenericSpecificationRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
