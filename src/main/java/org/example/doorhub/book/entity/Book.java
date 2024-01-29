@@ -1,5 +1,6 @@
 package org.example.doorhub.book.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
@@ -26,12 +27,12 @@ public class Book {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToOne(mappedBy = "book")
+    @OneToOne(mappedBy = "book",cascade = CascadeType.ALL,orphanRemoval = true)
     private User worker;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToOne(mappedBy = "book")
+    @OneToOne(mappedBy = "book",cascade = CascadeType.ALL,orphanRemoval = true)
     private User booker;
 
 }

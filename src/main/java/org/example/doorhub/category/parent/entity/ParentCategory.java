@@ -24,7 +24,7 @@ public class ParentCategory {
     private String avatar;
 
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JsonProperty("categoryId")
     @JoinColumn(name = "category_id")
     @EqualsAndHashCode.Exclude

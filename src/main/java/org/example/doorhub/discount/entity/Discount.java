@@ -22,7 +22,7 @@ public class Discount {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JsonProperty("parentCategoryId")
     @JoinColumn(name = "parentCategoryId")
     @EqualsAndHashCode.Exclude

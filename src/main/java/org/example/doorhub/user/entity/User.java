@@ -41,7 +41,7 @@ public class User implements UserDetails {
     private LocalDateTime created;
     private LocalDateTime updated;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @JoinTable(name = "user_addresses",
@@ -49,7 +49,7 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "address_id"))
     private List<Address> addresses;
 
-    @OneToMany()
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @JoinTable(name = "user_categories",
@@ -63,7 +63,7 @@ public class User implements UserDetails {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
     private Attachment attachments;
 
 
@@ -76,7 +76,7 @@ public class User implements UserDetails {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany()
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
     @JoinTable(name = "user_reviews",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "review_id"))
