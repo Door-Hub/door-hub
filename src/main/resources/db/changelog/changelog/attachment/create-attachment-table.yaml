@@ -1,8 +1,9 @@
 databaseChangeLog:
   - changeSet:
-      id: create attachment table
+      id: create_attachment_table
       author: diyorbek2110@gmail.com
       changes:
         - sqlFile:
             path: create-attachment-table.sql
             relativeToChangelogFile: true
+
