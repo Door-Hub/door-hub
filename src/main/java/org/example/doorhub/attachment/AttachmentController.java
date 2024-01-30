@@ -20,14 +20,13 @@ import java.util.Objects;
 public class AttachmentController {
     private final AttachmentService service;
 
-    @PostMapping( value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AttachmentResponseDto> uploadFile(@RequestParam("file")MultipartFile file, @RequestParam("userId") Integer userId)  {
+    @PostMapping(value = "/upload/user", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AttachmentResponseDto> uploadFileUser(@RequestParam("file") MultipartFile file, @RequestParam("userId") Integer userId) {
         return switch (Objects.requireNonNull(file.getContentType())) {
-            case
-                    MediaType.IMAGE_GIF_VALUE,
+            case MediaType.IMAGE_GIF_VALUE,
                     MediaType.IMAGE_JPEG_VALUE,
                     MediaType.IMAGE_PNG_VALUE -> {
-                AttachmentResponseDto attachmentResponseDto = service.processImageUpload(file, userId);
+                AttachmentResponseDto attachmentResponseDto = service.processImageUploadUser(file, userId);
                 yield ResponseEntity.ok(attachmentResponseDto);
             }
             default -> {
@@ -39,15 +38,14 @@ public class AttachmentController {
 
     }
 
-    @PutMapping( value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AttachmentResponseDto> updateFile(@RequestParam("file")MultipartFile file, @RequestParam("userId") Integer userId)  {
+    @PutMapping(value = "/upload/user", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AttachmentResponseDto> updateFile(@RequestParam("file") MultipartFile file, @RequestParam("userId") Integer userId) {
         return switch (Objects.requireNonNull(file.getContentType())) {
-            case
-                           MediaType.IMAGE_GIF_VALUE,
-                            MediaType.IMAGE_JPEG_VALUE,
-                            MediaType.IMAGE_PNG_VALUE -> {
+            case MediaType.IMAGE_GIF_VALUE,
+                    MediaType.IMAGE_JPEG_VALUE,
+                    MediaType.IMAGE_PNG_VALUE -> {
 
-                AttachmentResponseDto attachmentResponseDto = service.processImageUpdate(file, userId);
+                AttachmentResponseDto attachmentResponseDto = service.processImageUpdateUser(file, userId);
                 yield ResponseEntity.ok(attachmentResponseDto);
 
             }
@@ -61,9 +59,56 @@ public class AttachmentController {
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<?> delete( @PathVariable Integer userId){
-        service.deleteAttachment(userId);
+    public ResponseEntity<?> deleteUser(@PathVariable Integer userId) {
+        service.deleteAttachmentUser(userId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @PostMapping(value = "/upload/category", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AttachmentResponseDto> uploadFileCategory(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("categoryId") Integer categoryId) {
+
+        return switch (Objects.requireNonNull(file.getContentType())) {
+            case MediaType.IMAGE_GIF_VALUE,
+                    MediaType.IMAGE_JPEG_VALUE,
+                    MediaType.IMAGE_PNG_VALUE -> {
+                AttachmentResponseDto attachmentResponseDto = service.processImageUploadCategory(file, categoryId);
+                yield ResponseEntity.ok(attachmentResponseDto);
+            }
+            default -> {
+                log.error("Unsupported filetype: {}", file.getContentType());
+                throw new UnsupportedMediaTypeStatusException(
+                        String.format("Unsupported filetype: %s", file.getContentType()));
+            }
+        };
+
+    }
+
+    @PutMapping(value = "/upload/category", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AttachmentResponseDto> updateFileCategory(@RequestParam("file") MultipartFile file, @RequestParam("categoryId") Integer categoryId) {
+
+        return switch (Objects.requireNonNull(file.getContentType())) {
+            case MediaType.IMAGE_GIF_VALUE,
+                    MediaType.IMAGE_JPEG_VALUE,
+                    MediaType.IMAGE_PNG_VALUE -> {
+
+                AttachmentResponseDto attachmentResponseDto = service.processImageUpdateCategory(file, categoryId);
+                yield ResponseEntity.ok(attachmentResponseDto);
+
+            }
+            default -> {
+                log.error("Unsupported filetype: {}", file.getContentType());
+                throw new UnsupportedMediaTypeStatusException(
+                        String.format("Unsupported filetype: %s", file.getContentType()));
+            }
+        };
+
+    }
+
+    @DeleteMapping("/{categoryId}")
+    public ResponseEntity<?> deleteCategory(@PathVariable Integer categoryId) {
+        service.deleteAttachmentCategory(categoryId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

@@ -2,10 +2,12 @@ package org.example.doorhub.attachment.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.doorhub.category.entity.Category;
 import org.example.doorhub.user.entity.User;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -32,7 +34,11 @@ public class Attachment {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToOne()
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToOne()
+    private Category category;
 
 }

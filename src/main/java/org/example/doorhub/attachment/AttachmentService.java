@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.doorhub.attachment.dto.AttachmentCreateDto;
 import org.example.doorhub.attachment.dto.AttachmentResponseDto;
 import org.example.doorhub.attachment.entity.Attachment;
+import org.example.doorhub.category.CategoryRepository;
+import org.example.doorhub.category.entity.Category;
 import org.example.doorhub.common.exception.AttachmentNotFound;
 import org.example.doorhub.user.UserRepository;
 import org.example.doorhub.user.entity.User;
@@ -28,12 +30,13 @@ import java.util.UUID;
 public class AttachmentService {
     private final AttachmentRepository repository;
     private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
     private final ModelMapper mapper;
 
     @Value("${service.upload.dir}")
     private String uploadDir;
 
-    public AttachmentResponseDto processImageUpload(MultipartFile file, Integer userId) {
+    public AttachmentResponseDto processImageUploadUser(MultipartFile file, Integer userId) {
 
         if (file.isEmpty()) {
             log.error("Empty file uploaded");
@@ -48,17 +51,17 @@ public class AttachmentService {
             file.transferTo(destFile);
             log.info("Uploaded: {}", destFile);
 
-            AttachmentCreateDto attachment = new AttachmentCreateDto();
-            attachment.setFile_name(file.getOriginalFilename());
-            attachment.setFileType(Objects.requireNonNull(file.getContentType()));
-            attachment.setUrl(String.valueOf(Paths.get(uploadDir, file.getOriginalFilename())));
+            AttachmentCreateDto attachmentCrate = new AttachmentCreateDto();
+            attachmentCrate.setFile_name(file.getOriginalFilename());
+            attachmentCrate.setFileType(Objects.requireNonNull(file.getContentType()));
+            attachmentCrate.setUrl(String.valueOf(Paths.get(uploadDir, file.getOriginalFilename())));
+            Attachment attachment = mapper.map(attachmentCrate, Attachment.class);
+            attachment.setUser(user);
 
-            Attachment map = mapper.map(attachment, Attachment.class);
-
-            Attachment saved = repository.save(map);
+            Attachment saved = repository.save(attachment);
 
             user.setAttachment(saved);
-            user.setAvatar(attachment.getUrl());
+            user.setAvatar(attachmentCrate.getUrl());
 
             userRepository.save(user);
 
@@ -69,7 +72,7 @@ public class AttachmentService {
         }
     }
 
-    public AttachmentResponseDto processImageUpdate(MultipartFile file, Integer userId) {
+    public AttachmentResponseDto processImageUpdateUser(MultipartFile file, Integer userId) {
 
         if (file.isEmpty()) {
             log.error("Empty file uploaded");
@@ -91,7 +94,7 @@ public class AttachmentService {
             attachment.setId(user.getAttachment().getId());
             attachment.setFile_name(file.getOriginalFilename());
             attachment.setFileType(Objects.requireNonNull(file.getContentType()));
-            attachment.setUrl(String.valueOf(Paths.get( uploadDir , file.getOriginalFilename())));
+            attachment.setUrl(String.valueOf(Paths.get(uploadDir, file.getOriginalFilename())));
             attachment.setUploadTime(LocalDateTime.now());
 
             Attachment saved = repository.save(attachment);
@@ -114,8 +117,100 @@ public class AttachmentService {
         }
     }
 
+    public AttachmentResponseDto processImageUploadCategory(MultipartFile file, Integer categoryId) {
 
-    public void deleteAttachment(Integer userId) {
+        if (file.isEmpty()) {
+            log.error("Empty file uploaded");
+            throw new IllegalArgumentException("Empty file uploaded");
+        }
+
+        try {
+            Category category = categoryRepository.findById(categoryId)
+                    .orElseThrow(() -> new EntityNotFoundException("Category with id = %s not found".formatted(categoryId)));
+
+            File destFile = Paths.get(uploadDir, file.getOriginalFilename()).toFile();
+            file.transferTo(destFile);
+            log.info("Uploaded: {}", destFile);
+
+            AttachmentCreateDto attachment = new AttachmentCreateDto();
+            attachment.setFile_name(file.getOriginalFilename());
+            attachment.setFileType(Objects.requireNonNull(file.getContentType()));
+            attachment.setUrl(String.valueOf(Paths.get(uploadDir, file.getOriginalFilename())));
+
+            Attachment map = mapper.map(attachment, Attachment.class);
+            map.setCategory(category);
+
+            Attachment saved = repository.save(map);
+
+            category.setAttachment(saved);
+            category.setAvatar(attachment.getUrl());
+
+            categoryRepository.save(category);
+
+            return mapper.map(saved, AttachmentResponseDto.class);
+        } catch (IOException e) {
+            log.error("Error uploading file: {}", e.getMessage());
+            throw new RuntimeException("Error uploading file", e);
+        }
+
+    }
+
+    public AttachmentResponseDto processImageUpdateCategory(MultipartFile file, Integer categoryId) {
+
+        if (file.isEmpty()) {
+            log.error("Empty file uploaded");
+            throw new IllegalArgumentException("Empty file uploaded");
+        }
+
+        try {
+            File destFile = Paths.get(uploadDir, file.getOriginalFilename()).toFile();
+            file.transferTo(destFile);
+            log.info("Uploaded: {}", destFile);
+
+            Category category = categoryRepository.findById(categoryId)
+                    .orElseThrow(() -> new EntityNotFoundException("Category with id = %s not found".formatted(categoryId)));
+
+            Attachment attachment = category.getAttachment();
+            String url = attachment.getUrl();
+            deleteFile(url);
+
+            attachment.setId(category.getAttachment().getId());
+            attachment.setFile_name(file.getOriginalFilename());
+            attachment.setFileType(Objects.requireNonNull(file.getContentType()));
+            attachment.setUrl(String.valueOf(Paths.get(uploadDir, file.getOriginalFilename())));
+            attachment.setUploadTime(LocalDateTime.now());
+
+            Attachment saved = repository.save(attachment);
+
+            return mapper.map(saved, AttachmentResponseDto.class);
+
+        } catch (IOException e) {
+            log.error("Error uploading file: {}", e.getMessage());
+            throw new RuntimeException("Error uploading file", e);
+        }
+    }
+
+    public void deleteAttachmentCategory(Integer categoryId) {
+
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new EntityNotFoundException("Category with id = %s not found".formatted(categoryId)));
+
+
+        Attachment attachment = category.getAttachment();
+
+        if (attachment != null) {
+            category.setAttachment(null);
+            categoryRepository.save(category);
+            Integer attachmentID = attachment.getId();
+            repository.deleteById(attachmentID);
+            deleteFile(attachment.getUrl());
+        } else {
+            throw new AttachmentNotFound("Attachment not found for the user");
+        }
+
+    }
+
+    public void deleteAttachmentUser(Integer userId) {
 
         User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
 
@@ -133,4 +228,6 @@ public class AttachmentService {
         }
 
     }
+
+
 }

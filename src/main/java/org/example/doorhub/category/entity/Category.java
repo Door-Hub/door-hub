@@ -2,6 +2,7 @@ package org.example.doorhub.category.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.doorhub.attachment.entity.Attachment;
 import org.example.doorhub.category.parent.entity.ParentCategory;
 import org.example.doorhub.discount.entity.Discount;
 
@@ -21,6 +22,12 @@ public class Category {
     private String name;
     private String avatar;
 
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "attachment_id")
+    private Attachment attachment;
 
 
     @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
