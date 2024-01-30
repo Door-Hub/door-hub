@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: create user table
+      id: create_user_table
       author: diyorbek2110@gmail.com
       changes:
         - sqlFile:

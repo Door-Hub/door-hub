@@ -2,7 +2,7 @@ CREATE TYPE "role" AS ENUM ('USER', 'WORKER');
 
 CREATE TABLE "user"
 (
-    id           SERIAL PRIMARY KEY ,
+    id           SERIAL PRIMARY KEY,
     firstname    VARCHAR(255) NOT NULL,
     lastname     VARCHAR(255) NOT NULL,
     avatar       VARCHAR(255),
@@ -14,6 +14,8 @@ CREATE TABLE "user"
     created      TIMESTAMP,
     updated      TIMESTAMP,
     role         "role",
-    book_id      INT,
-    roles        VARCHAR(255) ARRAY
+    roles        VARCHAR(255) ARRAY,
+    book_id int,
+    attachment_id int
 );
+
