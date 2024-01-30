@@ -32,8 +32,8 @@ spring:
     properties:
       hibernate:
         show_sql: true
-    hibernate:
-      ddl-auto: update
+#    hibernate:
+#      ddl-auto: update
     open-in-view: false
 
   application:
