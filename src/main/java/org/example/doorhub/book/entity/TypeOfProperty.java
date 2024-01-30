@@ -2,5 +2,5 @@ package org.example.doorhub.book.entity;
 
 public enum TypeOfProperty {
 
-    HOME,OFFICE,VILA;
+    HOME,OFFICE,VILLA;
 }
