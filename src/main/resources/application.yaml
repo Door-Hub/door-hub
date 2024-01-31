@@ -32,6 +32,10 @@ spring:
     properties:
       hibernate:
         show_sql: true
+    hibernate:
+      ddl-auto: create-drop
+      cache:
+        use_query_cache: false
     open-in-view: false
 
   application:
@@ -51,7 +55,4 @@ location:
 
 service:
   upload:
-     dir: C:\Users\Acer\java-projects\door-hub\src\main\resources\img\UserImg
-logging:
-  level:
-    sql: debug
+    dir: D:\Java code\Door-Hub\src\main\resources\img

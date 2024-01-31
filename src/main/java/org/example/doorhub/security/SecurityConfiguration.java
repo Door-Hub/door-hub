@@ -18,40 +18,49 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableMethodSecurity(  prePostEnabled = true,
+@EnableMethodSecurity(
+        prePostEnabled = true,
         securedEnabled = true,
         jsr250Enabled = true)
 @RequiredArgsConstructor
-public class SecurityConfiguration
-{
+public class SecurityConfiguration {
+
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;
     private final CustomOauth2UserService oauth2UserDetails;
-    private final String[] WHITE_LIST = {
-            "/swagger-ui.html",
-            "/swagger-ui/",
-            "/v3/api-docs/",
-            "/swagger-resources/",
-            "/webjars/" ,
-            "/oauth2/",
-            "/login/",
 
-            "/auth/",
-            "/notification/",
-            "/category/",
-            "/book/",
-            "/discount/",
-            "/review/" ,
-            "/api/files/"
+    final String[] MATCHERS = {
+
+            "swagger - ui.html",
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/swagger-resources/**",
+            "/webjars/** ",
+            "user/**",
+            "/oauth2/**",
+            "/login/**",
+            "/auth/register",
+            "/auth/register/verify-phone",
+            "/notification/**",
+            "/category/**",
+            "/book/**",
+            "/discount/**",
+            "/review/**",
+            "/parent/**",
+            "/address/**",
+            "/api/files/**"
+
+
     };
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity security, JwtSecurityFilter jwtSecurityFilter) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity security, JwtSecurityFilter jwtSecurityFilter) throws Exception {
 
         return security
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(request -> request.requestMatchers(WHITE_LIST)
+                .authorizeHttpRequests(request -> request.requestMatchers(MATCHERS)
                         .permitAll()
                         .anyRequest()
                         .fullyAuthenticated())
@@ -65,18 +74,17 @@ public class SecurityConfiguration
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(8);
     }
 
 
     @Bean
-    JedisConnectionFactory jedisConnectionFactory()
-    {
-        RedisStandaloneConfiguration localhost = new RedisStandaloneConfiguration( "redis-19659.c322.us-east-1-2.ec2.cloud.redislabs.com", 19659 );
+    JedisConnectionFactory jedisConnectionFactory() {
+        RedisStandaloneConfiguration localhost = new RedisStandaloneConfiguration("redis-19659.c322.us-east-1-2.ec2.cloud.redislabs.com", 19659);
         localhost.setUsername("default");
         localhost.setPassword("30nUG7ITRag7DbOHldaPALyx0j10M1gU");
-        return new JedisConnectionFactory( localhost );
+        return new JedisConnectionFactory(localhost);
     }
 
 }

@@ -8,10 +8,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.example.doorhub.user.entity.User;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
@@ -29,6 +29,7 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
        try {
+
            String header = request.getHeader(HttpHeaders.AUTHORIZATION);
 
            if (StringUtils.isBlank(header) || !header.startsWith("Bearer")){
@@ -40,6 +41,8 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
            String phone = claims.getSubject();
 
            UserDetails userDetails = userDetailsService.loadUserByUsername(phone);
+
+           User user = (User) userDetails;
 
            var authenticationToken = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
 

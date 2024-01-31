@@ -4,7 +4,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -16,12 +15,12 @@ import java.util.Date;
 import java.util.Map;
 
 @Component
-public class JwtService {
+public class
+JwtService {
 
     @Value("${security.jwt.key}")
     private String SECRET_KEY;
 
-    @Transactional
     public String generateToken(String phone, Map<String, Object> claims) {
         return Jwts.builder()
                 .setClaims(claims)
@@ -29,16 +28,14 @@ public class JwtService {
                 .signWith(signKey())
                 .setIssuedAt(Date.from(Instant.now()))
                 .setExpiration(Date.from(Instant.now().plus(3, ChronoUnit.DAYS)))
-                .setIssuer("www.door-hob.com")
+                .setIssuer("www.door-hub.com")
                 .compact();
     }
 
-    @Transactional
     public String generateToken(String phone) {
         return generateToken(phone, Collections.emptyMap());
     }
 
-    @Transactional
     public Claims claims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(signKey())
@@ -47,8 +44,7 @@ public class JwtService {
                 .getBody();
     }
 
-    @Transactional
-    protected Key signKey() {
+    private Key signKey() {
         byte[] bytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(bytes);
     }
