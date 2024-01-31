@@ -33,12 +33,11 @@ spring:
       hibernate:
         show_sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     open-in-view: false
 
   application:
     name: door-hub
-
 security:
   jwt:
     key: WC+qbHYl2B0o02421L+2UayDp2LtczY/3cSkAyErfTjmcEOXNtyjXq0un/SdY4cw
@@ -54,3 +53,6 @@ location:
 service:
   upload:
      dir: C:\Users\Acer\java-projects\door-hub\src\main\resources\img\UserImg
+logging:
+  level:
+    sql: debug
